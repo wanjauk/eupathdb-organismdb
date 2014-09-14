@@ -20,3 +20,6 @@ maintainer : "Your Name <user@mail.com>"
 # TriTrypDB version
 tritrypdb_version : '8.1'
 
+# Directories
+build_dir  : 'build'
+output_dir : '.'
