@@ -1,0 +1,22 @@
+#
+# TriTrypDB OrganismDB package settings
+#
+
+# Organism
+genus   : 'Leishmania'
+species : 'major'
+tax_id  : '347515'
+
+# Annotation file sources
+# If not specified, or files do not exists, will attempt to download
+# For the txt files, an uncompressed or gzipped version may be used.
+gff : '/path/to/TriTrypDB-8.0_LmajorFriedlin.gff'
+txt : '/path/to/TriTrypDB-8.0_LmajorFriedlinGene.txt.gz'
+
+# Author
+author     : "Your Name <user@mail.com>"
+maintainer : "Your Name <user@mail.com>"
+
+# TriTrypDB version
+tritrypdb_version : '8.1'
+
