@@ -7,6 +7,14 @@ Overview
 This script uses resources from TriTrypDB to generate a Bioconductor Organism
 annotation package. 
 
+Requirements
+------------
+
+For this script to work, you must have installed the following R libraries:
+
+- [yaml](http://cran.r-project.org/web/packages/yaml/index.html)
+- [rtracklayer](http://www.bioconductor.org/packages/release/bioc/html/rtracklayer.html)
+
 Usage
 -----
 
@@ -15,8 +23,8 @@ The use this script, begin by modifying the example configuration file,
 
 From there, simply run `build.r`:
 
-```r
-Rscript build.r
+```sh
+$ Rscript build.r
 ```
 
 The script should generate an orgDB package in the working directory. You can
