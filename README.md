@@ -26,25 +26,36 @@ configuration files for several species can be found in the `settings` folder.
 Next, modify the `build_xx.r` scripts to point to the setting file you wish you
 use.
 
-From there, simply run the build scripts in the following order:
+Now we are ready to construct the OrgDb and TranscriptDb packages:
 
 ```sh
 $ Rscript build_orgdb.r
 $ Rscript build_txdb.r
-$ Rscript build_organismdb.r
-$ sh finalize.sh
+$ sh prepare_dbs.sh
 ```
 
-This will generate OrgDb, TranscriptDb, and OrganismDb packages in the current
-working directory. The final script performs some post-processing to replace
-default names with desired ones, etc.
+This will generate OrgDb and TranscriptDb packages in the current working
+directory. The `prepare_dbs.sh` script performs some post-processing to replace
+default names with desired before generating the final Organism package.
+
+The final step then is to construct an OrganismDb package. In order to proceed,
+however, you must first install the OrgDb and TranscriptDb packages generated
+above.
 
 You can then use the `install.packages` command to install the annotations
 database locally, e.g.:
 
 ```r
-install.packages("./org.Lmajor.eg.db", repos=NULL)
+install.packages("./org.LmjF.tritryp.db", repos=NULL)
 ```
+
+Finally, the Organism package can be constructed using the following command:
+
+```sh
+$ Rscript build_organismdb.r
+```
+
+All done!
 
 Getting Help
 ------------

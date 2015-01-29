@@ -12,8 +12,8 @@
 library(yaml)
 library(GenomicFeatures)
 library(OrganismDbi)
-library(org.Lmajor.eg.db)
-library(TxDb.Lmajor)
+library(org.LmjF.tritryp.db)
+library(TxDb.LmajorFriedlin.tt9.knownGene)
 
 options(stringsAsFactors=FALSE)
 
@@ -36,8 +36,8 @@ txdb = loadDb(file=sprintf('%s.sqlite', short_name))
 
 # mapping
 graph_data = list(
-    join1=c(GO.db='GOID', org.Lmajor.eg.db='GO'),
-    join2=c(org.Lmajor.eg.db='GID', TxDb.Lmajor='GENEID')
+    join1=c(GO.db='GOID', org.LmjF.tritryp.db='GO'),
+    join2=c(org.LmjF.tritryp.db='GID', TxDb.LmajorFriedlin.tt9.knownGene='GENEID')
 )
 
 makeOrganismPackage(

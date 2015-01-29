@@ -33,8 +33,14 @@ function parse_yaml {
 # load configuration
 eval $(parse_yaml config.yaml)
 
+#
+# OrgDB
+#
+
 # old package name (e.g. "org.Lmajor.eg.db")
 printf -v orgdb_name_old 'org.%s%s.eg.db' ${genus:0:1} ${species}
+
+echo "Processing $orgdb_name_old..."
 
 # name without the .db suffix
 orgdb_name_short_old=${orgdb_name_old/.db/}
@@ -68,5 +74,30 @@ done
 
 # Fix zzz.R
 sed -i "s/$orgdb_name_short_old/$orgdb_name_short/" R/zzz.R
+
+cd ..
+
+#
+# TranscriptDB
+#
+printf -v txdb_name_old 'TxDb.%s%s' ${genus:0:1} ${species}
+echo "Processing $txdb_name_old..."
+
+mv $txdb_name_old $txdb_name
+cd $txdb_name
+
+# Fix DESCRIPTION
+sed -i "s/$txdb_name_old/$txdb_name/" DESCRIPTION
+sed -i "s/species:.*/species: $description/" DESCRIPTION
+
+# Fix NAMESPACE
+sed -i "s/$txdb_name_old/$txdb_name/" NAMESPACE
+
+# Fix sqlite database
+dbpath=inst/extdata/${txdb_name}.sqlite
+mv inst/extdata/${txdb_name_old}.sqlite $dbpath
+
+# Fix Manual pages
+sed -i "s/$txdb_name_old/$txdb_name/" man/package.Rd
 
 echo "Done!"
