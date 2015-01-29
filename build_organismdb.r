@@ -41,7 +41,7 @@ graph_data = list(
 )
 
 makeOrganismPackage(
-    pkgname=paste(settings$genus, settings$species, sep='.'),
+    pkgname=settings$organismdb_name,
     graphData=graph_data,
     organism=paste(settings$genus, settings$species),
     version=settings$tritrypdb_version,
