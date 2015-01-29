@@ -32,11 +32,15 @@ From there, simply run the build scripts in the following order:
 $ Rscript build_orgdb.r
 $ Rscript build_txdb.r
 $ Rscript build_organismdb.r
+$ sh finalize.sh
 ```
 
 This will generate OrgDb, TranscriptDb, and OrganismDb packages in the current
-working directory.  You can then use the `install.packages` command to install
-the annotations database locally, e.g.:
+working directory. The final script performs some post-processing to replace
+default names with desired ones, etc.
+
+You can then use the `install.packages` command to install the annotations
+database locally, e.g.:
 
 ```r
 install.packages("./org.Lmajor.eg.db", repos=NULL)

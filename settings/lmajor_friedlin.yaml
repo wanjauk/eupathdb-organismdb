@@ -3,9 +3,16 @@
 #
 
 # Organism
-genus   : 'Leishmania'
-species : 'major'
-tax_id  : '347515'
+genus       : 'Leishmania'
+species     : 'major'
+tax_id      : '347515'
+description : 'L. major strain Friedlin'
+
+
+# Package names
+orgdb_name      : 'org.LmjF.tritryp.db'
+txdb_name       : 'TxDb.LmajorFriedlin.tt9.knownGene'
+organismdb_name : 'Leishmania.major.friedlin'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
