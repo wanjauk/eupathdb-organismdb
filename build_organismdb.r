@@ -30,10 +30,6 @@ if (!file.exists(settings$build_dir)) {
 build_basename = file.path(settings$build_dir,
                             sub('.gff', '', basename(settings$gff)))
 
-
-short_name = paste0(substring(tolower(settings$genus), 1, 1), settings$species)
-txdb = loadDb(file=sprintf('%s.sqlite', short_name))
-
 # mapping
 graph_data = list(
     join1=c(GO.db='GOID', org.LmjF.tritryp.db='GO'),
