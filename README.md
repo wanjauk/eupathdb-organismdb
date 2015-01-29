@@ -14,22 +14,29 @@ For this script to work, you must have installed the following R libraries:
 
 - [yaml](http://cran.r-project.org/web/packages/yaml/index.html)
 - [rtracklayer](http://www.bioconductor.org/packages/release/bioc/html/rtracklayer.html)
+- [GenomicFeatures](http://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html)
+- [OrganismDbi](http://www.bioconductor.org/packages/release/bioc/html/OrganismDbi.html)
 
 Usage
 -----
 
-The use this script, begin by modifying the example configuration file,
-`config.example.yaml` and save it as `config.yaml`.
+The use this script, begin by modifying or creating a new YAML configuration
+file specifying the details for the species you wish to process. Examples
+configuration files for several species can be found in the `settings` folder.
+Next, modify the `build_xx.r` scripts to point to the setting file you wish you
+use.
 
-From there, simply run `build.r`:
+From there, simply run the build scripts in the following order:
 
 ```sh
-$ Rscript build.r
+$ Rscript build_orgdb.r
+$ Rscript build_txdb.r
+$ Rscript build_organismdb.r
 ```
 
-The script should generate an orgDB package in the working directory. You can
-then use the `install.packages` command to install the annotations database
-locally, e.g.:
+This will generate OrgDb, TranscriptDb, and OrganismDb packages in the current
+working directory.  You can then use the `install.packages` command to install
+the annotations database locally, e.g.:
 
 ```r
 install.packages("./org.Lmajor.eg.db", repos=NULL)
@@ -49,12 +56,12 @@ For questions, feel free to contact me at [khughitt@umd.edu](khughitt@umd.edu).
 See Also
 --------
 
-- [http://www.bioconductor.org/packages/release/bioc/vignettes/AnnotationForge/inst/doc/MakingNewOrganismPackages.html](AnnotationForge - Making Organism packages)
-- [http://www.bioconductor.org/packages/release/bioc/vignettes/GenomicFeatures/inst/doc/GenomicFeatures.pdf](Bioconductor - Making and Utilizing TxDb Objects)
-- [http://www.bioconductor.org/help/workflows/annotation/#Making-an-OrganismDb-package](Bioconductor - Making an OrganismDb package)
-- [http://www.bioconductor.org/packages/release/bioc/html/AnnotationForge.html](Bioconductor - AnnotationForge)
-- [http://www.bioconductor.org/packages/release/data/annotation/html/GO.db.html](Bioconductor - GO.db)
-- [http://www.bioconductor.org/packages/release/bioc/html/OrganismDbi.html](Bioconductor - OrganismDbi) 
+- [AnnotationForge - Making Organism packages](http://www.bioconductor.org/packages/release/bioc/vignettes/AnnotationForge/inst/doc/MakingNewOrganismPackages.html)
+- [Bioconductor - Making and Utilizing TxDb Objects](http://www.bioconductor.org/packages/release/bioc/vignettes/GenomicFeatures/inst/doc/GenomicFeatures.pdf)
+- [Bioconductor - Making an OrganismDb package](http://www.bioconductor.org/help/workflows/annotation/#Making-an-OrganismDb-package)
+- [Bioconductor - AnnotationForge](http://www.bioconductor.org/packages/release/bioc/html/AnnotationForge.html)
+- [Bioconductor - GO.db](http://www.bioconductor.org/packages/release/data/annotation/html/GO.db.html)
+- [Bioconductor - OrganismDbi](http://www.bioconductor.org/packages/release/bioc/html/OrganismDbi.html)
 
 TODO
 ----

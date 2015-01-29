@@ -9,8 +9,8 @@ tax_id  : '347515'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff : '/cbcb/lab/nelsayed/ref_data/lmajor_friedlin/annotation/TriTrypDB-9.0_LmajorFriedlin.gff'
-txt : '/cbcb/lab/nelsayed/ref_data/lmajor_friedlin/annotation/TriTrypDB-9.0_LmajorFriedlinGene.txt.gz'
+gff : '/path/to/TriTrypDB-9.0_LmajorFriedlin.gff'
+txt : '/path/to/TriTrypDB-9.0_LmajorFriedlinGene.txt.gz'
 
 # Author
 author     : "Keith Hughitt <khughitt@umd.edu>"
