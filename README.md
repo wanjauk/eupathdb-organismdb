@@ -81,9 +81,7 @@ See Also
 TODO
 ----
 
-1. Rename packages (e.g. 'org.LmajorFriedlin.tritryp.db')
-2. Add strain information
-3. Add KEGG annotations
-4. Add UTRs
-5. Fix DBSCHEMA information
+1. Add KEGG annotations
+2. Add UTRs
+3. Fix DBSCHEMA information
 
