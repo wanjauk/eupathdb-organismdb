@@ -46,3 +46,22 @@ requests, or report the problem as an issue.
 
 For questions, feel free to contact me at [khughitt@umd.edu](khughitt@umd.edu).
 
+See Also
+--------
+
+- [http://www.bioconductor.org/packages/release/bioc/vignettes/AnnotationForge/inst/doc/MakingNewOrganismPackages.html](AnnotationForge - Making Organism packages)
+- [http://www.bioconductor.org/packages/release/bioc/vignettes/GenomicFeatures/inst/doc/GenomicFeatures.pdf](Bioconductor - Making and Utilizing TxDb Objects)
+- [http://www.bioconductor.org/help/workflows/annotation/#Making-an-OrganismDb-package](Bioconductor - Making an OrganismDb package)
+- [http://www.bioconductor.org/packages/release/bioc/html/AnnotationForge.html](Bioconductor - AnnotationForge)
+- [http://www.bioconductor.org/packages/release/data/annotation/html/GO.db.html](Bioconductor - GO.db)
+- [http://www.bioconductor.org/packages/release/bioc/html/OrganismDbi.html](Bioconductor - OrganismDbi) 
+
+TODO
+----
+
+1. Rename packages (e.g. 'org.LmajorFriedlin.tritryp.db')
+2. Add strain information
+3. Add KEGG annotations
+4. Add UTRs
+5. Fix DBSCHEMA information
+

@@ -1,0 +1,25 @@
+#
+# TriTrypDB OrganismDB package settings
+#
+
+# Organism
+genus   : 'Leishmania'
+species : 'major'
+tax_id  : '347515'
+
+# Annotation file sources
+# If not specified, or files do not exists, will attempt to download
+gff : '/cbcb/lab/nelsayed/ref_data/lmajor_friedlin/annotation/TriTrypDB-9.0_LmajorFriedlin.gff'
+txt : '/cbcb/lab/nelsayed/ref_data/lmajor_friedlin/annotation/TriTrypDB-9.0_LmajorFriedlinGene.txt.gz'
+
+# Author
+author     : "Keith Hughitt <khughitt@umd.edu>"
+maintainer : "Keith Hughitt <khughitt@umd.edu>"
+
+# TriTrypDB version
+tritrypdb_version : '9.0'
+
+# Directories
+build_dir  : 'build'
+output_dir : '.'
+
