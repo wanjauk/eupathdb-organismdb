@@ -34,7 +34,7 @@ txdb = makeTranscriptDbFromGFF(
 
 # Save transcript database
 short_name = paste0(substring(tolower(settings$genus), 1, 1), settings$species)
-saveDb(txdb, file=sprintf("%s.sqlite", short_name))
+saveDb(txdb, file=file.path(settings$build_dir, sprintf("%s.sqlite", short_name)))
 
 # Build TxDB package
 makeTxDbPackage(

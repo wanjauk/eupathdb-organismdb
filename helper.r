@@ -61,6 +61,36 @@ parse_go_terms = function (filepath) {
 }
 
 #
+# kegg_to_genedb
+#
+# Takes a list of KEGG gene identifiers and returns a list of GeneDB
+# ids corresponding to those genes. 
+#
+kegg_to_genedb = function(kegg_ids, gene_mapping) {
+    # query gene ids 10 at a time (max allowed)
+    result = c()
+
+    for (x in split(kegg_ids, ceiling(seq_along(kegg_ids) / 10))) {
+        query = keggGet(x)
+        for (item in query) {
+            dblinks = item$DBLINKS
+            genedb_id = dblinks[grepl('GeneDB', dblinks)]
+            if (length(genedb_id) > 0) {
+                # get old-style t. cruzi identifier
+                old_id = substring(genedb_id, 9)
+
+                # if possible, map to new id and add to results
+                if (!is.null(gene_mapping[[old_id]])) {
+                    result = append(result, gene_mapping[[old_id]])
+                }
+            }
+    
+        }
+    }
+    return(result)
+}
+
+#
 # Parses a key: value string and returns the value
 #
 .get_value = function(x) {

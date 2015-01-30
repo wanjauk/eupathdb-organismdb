@@ -6,6 +6,7 @@
 genus       : 'Leishmania'
 species     : 'major'
 tax_id      : '347515'
+tritryp_id  : 'LmjF'
 description : 'L. major strain Friedlin'
 
 
@@ -16,8 +17,10 @@ organismdb_name : 'Leishmania.major.friedlin'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff : '/path/to/TriTrypDB-9.0_LmajorFriedlin.gff'
-txt : '/path/to/TriTrypDB-9.0_LmajorFriedlinGene.txt.gz'
+gff     : '/path/to/TriTrypDB-9.0_LmajorFriedlin.gff'
+txt     : '/path/to/TriTrypDB-9.0_LmajorFriedlinGene.txt.gz'
+aliases : '/path/to/TriTrypDB-9.0_LmajorFriedlin_GeneAliases.txt'
+
 
 # Author
 author     : "Keith Hughitt <khughitt@umd.edu>"

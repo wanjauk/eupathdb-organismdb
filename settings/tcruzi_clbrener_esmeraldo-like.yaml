@@ -6,6 +6,7 @@
 genus       : 'Trypanosoma'
 species     : 'cruzi'
 tax_id      : '353153'
+tritryp_id  : 'TcCLB'
 description : 'T. cruzi strain CL Brener Esmeraldo-like'
 
 # Package names
@@ -15,8 +16,9 @@ organismdb_name : 'Trypanosoma.cruzi.CLBrener.Esmeraldo'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-like.gff'
-txt : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-likeGene.txt.gz'
+gff     : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-like.gff'
+txt     : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-likeGene.txt.gz'
+aliases : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-like_GeneAliases.txt'
 
 # Author
 author     : "Keith Hughitt <khughitt@umd.edu>"
