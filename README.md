@@ -26,6 +26,11 @@ configuration files for several species can be found in the `settings` folder.
 Next, modify the `build_xx.r` scripts to point to the setting file you wish you
 use.
 
+Note that at present, you may also need to edit the `build_orgdb.r` script
+to enable it to properly map KEGG identifiers to TriTrypDB identifiers for your
+target species. In the future, this will be generalized if possible so that
+this can be handled via config settings.
+
 Now we are ready to construct the OrgDb and TranscriptDb packages:
 
 ```sh
@@ -81,7 +86,12 @@ See Also
 TODO
 ----
 
-1. Add KEGG annotations
+1. Create vignettes
 2. Add UTRs
 3. Fix DBSCHEMA information
+4. Add additional metadata from TriTrypDB, e.g.:
+    - Gene Type
+    - NonSyn/Syn SNP Ratio
+    - Isoelectric Point
+    - etc.
 

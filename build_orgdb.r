@@ -95,11 +95,33 @@ if (!file.exists(kegg_mapping_file)) {
 
     # L. major
     if (org_abbreviation == 'lma') {
+        #
         # Convert KEGG identifiers to TriTrypDB identifiers
-        # Example: "lma:LMJF_11_0100" -> "LmjF.11.0100"
+        #
+        # Note that this currently skips a few entries with a different
+        # format, e.g. "md:lma_M00359", and "bsid:85066"
+        #
         convert_kegg_gene_ids = function(kegg_ids) {
-            return(gsub(toupper(settings$tritryp_id), settings$tritryp_id, 
-                        gsub("_", "\\.", substring(kegg_ids, 5))))
+            result = c()
+            for (kegg_id in kegg_ids) {
+                if (substring(kegg_id, 1, 9) == 'lma:LMJF_') {
+                    # lma:LMJF_11_0100
+                    result = append(result, 
+                                    gsub('LMJF', 'LmjF', 
+                                    gsub("_", "\\.", substring(kegg_id, 5))))
+                } else if (substring(kegg_id, 1, 8) == 'lma:LMJF') {
+                    # lma:LMJF10_TRNALYS_01
+                    parts = unlist(strsplit(kegg_id, "_"))
+                    result = append(result,
+                                    sprintf("LmjF.%s.%s.%s",
+                                    substring(kegg_id, 9, 10),
+                                    parts[2], parts[3]))
+                } else {
+                    print(sprintf("Skipping KEGG id: %s", kegg_id))
+                    result = append(result, NA)
+                }
+            }
+            return(result)
         }
     } else if (org_abbreviation == 'tcr') {
         # Load GeneAlias file and convert entry in KEGG results
@@ -143,7 +165,7 @@ if (!file.exists(kegg_mapping_file)) {
         
         # Get genes in pathway
         result = keggLink(pathway) 
-        kegg_ids = result[-1,2]
+        kegg_ids = result[,2]
         gene_ids = convert_kegg_gene_ids(kegg_ids)
         kegg_mapping = unique(rbind(kegg_mapping,
                              data.frame(GID=gene_ids, pathway=pathway)))
@@ -158,6 +180,9 @@ if (!file.exists(kegg_mapping_file)) {
     kegg_mapping = read.csv(kegg_mapping_file)
     kegg_pathways = read.delim(kegg_pathways_file)
 }
+
+# Drop columns with unrecognized identifiers
+kegg_mapping = kegg_mapping[complete.cases(kegg_mapping),]
 
 # Combined KEGG table
 kegg_table = merge(kegg_mapping, kegg_pathways, by='pathway')

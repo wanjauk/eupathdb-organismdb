@@ -6,7 +6,6 @@
 genus       : 'Trypanosoma'
 species     : 'cruzi'
 tax_id      : '353153'
-tritryp_id  : 'TcCLB'
 description : 'T. cruzi strain CL Brener Esmeraldo-like'
 
 # Package names
