@@ -33,6 +33,9 @@ function parse_yaml {
 # load configuration
 eval $(parse_yaml config.yaml)
 
+# current directory
+cwd=$(pwd)
+
 #
 # OrgDB
 #
@@ -47,8 +50,8 @@ orgdb_name_short_old=${orgdb_name_old/.db/}
 orgdb_name_short=${orgdb_name/.db/}
 
 # rename and enter directory
-mv $orgdb_name_old $orgdb_name
-cd $orgdb_name
+mv $output_dir/$orgdb_name_old $output_dir/$orgdb_name
+cd $output_dir/$orgdb_name
 
 # Fix DESCRIPTION
 sed -i "s/$orgdb_name_old/$orgdb_name/" DESCRIPTION
@@ -75,7 +78,7 @@ done
 # Fix zzz.R
 sed -i "s/$orgdb_name_short_old/$orgdb_name_short/" R/zzz.R
 
-cd ..
+cd $cwd
 
 #
 # TranscriptDB
@@ -83,8 +86,8 @@ cd ..
 printf -v txdb_name_old 'TxDb.%s%s' ${genus:0:1} ${species}
 echo "Processing $txdb_name_old..."
 
-mv $txdb_name_old $txdb_name
-cd $txdb_name
+mv $output_dir/$txdb_name_old $output_dir/$txdb_name
+cd $output_dir/$txdb_name
 
 # Fix DESCRIPTION
 sed -i "s/$txdb_name_old/$txdb_name/" DESCRIPTION

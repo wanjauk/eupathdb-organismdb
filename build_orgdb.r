@@ -20,12 +20,15 @@ options(stringsAsFactors=FALSE)
 # Load settings
 settings = yaml.load_file("config.yaml")
 
-# Create build directory
+# Create build and output directories
 if (!file.exists(settings$build_dir)) {
     dir.create(settings$build_dir)
 }
+if (!file.exists(settings$output_dir)) {
+    dir.create(settings$output_dir)
+}
 build_basename = file.path(settings$build_dir,
-                            sub('.gff', '', basename(settings$gff)))
+                           sub('.gff', '', basename(settings$gff)))
 
 # Parse GFF
 gff = import.gff3(settings$gff)

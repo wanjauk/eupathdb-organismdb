@@ -30,5 +30,5 @@ tritrypdb_version : '9.0'
 
 # Directories
 build_dir  : 'build'
-output_dir : '.'
+output_dir : 'output'
 

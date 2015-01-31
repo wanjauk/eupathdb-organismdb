@@ -12,8 +12,6 @@
 library(yaml)
 library(GenomicFeatures)
 library(OrganismDbi)
-library(org.LmjF.tritryp.db)
-library(TxDb.LmajorFriedlin.tt9.knownGene)
 
 options(stringsAsFactors=FALSE)
 
@@ -30,10 +28,16 @@ if (!file.exists(settings$build_dir)) {
 build_basename = file.path(settings$build_dir,
                             sub('.gff', '', basename(settings$gff)))
 
+# Load organism-specific packages
+library(settings$orgdb_name, character.only=TRUE)
+library(settings$txdb_name,  character.only=TRUE)
+orgdb = get(settings$orgdb_name)
+txdb  = get(settings$txdb_name)
+
 # mapping
 graph_data = list(
-    join1=c(GO.db='GOID', org.LmjF.tritryp.db='GO'),
-    join2=c(org.LmjF.tritryp.db='GID', TxDb.LmajorFriedlin.tt9.knownGene='GENEID')
+    join1=c(GO.db='GOID', orgdb='GO'),
+    join2=c(orgdb='GID', txdb='GENEID')
 )
 
 makeOrganismPackage(
@@ -43,6 +47,6 @@ makeOrganismPackage(
     version=settings$tritrypdb_version,
     maintainer=settings$maintainer,
     author=settings$author,
-    destDir='.',
+    destDir=settings$output_dir,
     license='Artistic-2.0'
 )

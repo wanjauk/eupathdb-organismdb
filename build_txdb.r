@@ -39,6 +39,7 @@ saveDb(txdb, file=file.path(settings$build_dir, sprintf("%s.sqlite", short_name)
 # Build TxDB package
 makeTxDbPackage(
     txdb,
+    destDir=settings$output_dir,
     version=settings$tritrypdb_version,
     maintainer=settings$maintainer,
     author=settings$author,
