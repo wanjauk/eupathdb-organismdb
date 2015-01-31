@@ -31,14 +31,15 @@ build_basename = file.path(settings$build_dir,
 # Load organism-specific packages
 library(settings$orgdb_name, character.only=TRUE)
 library(settings$txdb_name,  character.only=TRUE)
-orgdb = get(settings$orgdb_name)
-txdb  = get(settings$txdb_name)
 
 # mapping
 graph_data = list(
     join1=c(GO.db='GOID', orgdb='GO'),
-    join2=c(orgdb='GID', txdb='GENEID')
+    join2=c(orgdb='GID',  txdb='GENEID')
 )
+
+names(graph_data$join1) = c('GO.db', settings$orgdb_name)
+names(graph_data$join2) = c(settings$orgdb_name, settings$txdb_name)
 
 makeOrganismPackage(
     pkgname=settings$organismdb_name,
