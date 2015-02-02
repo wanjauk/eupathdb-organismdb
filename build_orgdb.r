@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 ###############################################################################
 #
 # TriTrypDB OrgDB package generation
@@ -87,6 +88,33 @@ if (file.exists(go_file)) {
 kegg_mapping_file  = sprintf("%s_kegg_mapping.txt", build_basename)
 kegg_pathways_file = sprintf("%s_kegg_pathways.txt", build_basename)
 
+
+convert_kegg_gene_ids = function(kegg_ids) {
+    result = c()
+    for (kegg_id in kegg_ids) {
+        if (substring(kegg_id, 1, 4) == 'tcr:') {
+            result = append(result,
+                gsub('tcr:', 'TcCLB.', kegg_id))
+        } else if (substring(kegg_id, 1, 9) == 'lma:LMJF_') {
+                                        # lma:LMJF_11_0100
+            result = append(result, 
+                gsub('LMJF', 'LmjF', 
+                     gsub("_", "\\.", substring(kegg_id, 5))))
+        } else if (substring(kegg_id, 1, 8) == 'lma:LMJF') {
+                                        # lma:LMJF10_TRNALYS_01
+            parts = unlist(strsplit(kegg_id, "_"))
+            result = append(result,
+                sprintf("LmjF.%s.%s.%s",
+                        substring(kegg_id, 9, 10),
+                        parts[2], parts[3]))
+        } else {
+            print(sprintf("Skipping KEGG id: %s", kegg_id))
+            result = append(result, NA)
+        }
+    }
+    return(result)
+} ## End convert_kegg_gene_ids
+
 if (!file.exists(kegg_mapping_file)) {
     library(KEGGREST)
 
@@ -104,28 +132,6 @@ if (!file.exists(kegg_mapping_file)) {
         # Note that this currently skips a few entries with a different
         # format, e.g. "md:lma_M00359", and "bsid:85066"
         #
-        convert_kegg_gene_ids = function(kegg_ids) {
-            result = c()
-            for (kegg_id in kegg_ids) {
-                if (substring(kegg_id, 1, 9) == 'lma:LMJF_') {
-                    # lma:LMJF_11_0100
-                    result = append(result, 
-                                    gsub('LMJF', 'LmjF', 
-                                    gsub("_", "\\.", substring(kegg_id, 5))))
-                } else if (substring(kegg_id, 1, 8) == 'lma:LMJF') {
-                    # lma:LMJF10_TRNALYS_01
-                    parts = unlist(strsplit(kegg_id, "_"))
-                    result = append(result,
-                                    sprintf("LmjF.%s.%s.%s",
-                                    substring(kegg_id, 9, 10),
-                                    parts[2], parts[3]))
-                } else {
-                    print(sprintf("Skipping KEGG id: %s", kegg_id))
-                    result = append(result, NA)
-                }
-            }
-            return(result)
-        }
     } else if (org_abbreviation == 'tcr') {
         # Load GeneAlias file and convert entry in KEGG results
         # to newer GeneDB/TriTrypDB identifiers.
@@ -141,9 +147,9 @@ if (!file.exists(kegg_mapping_file)) {
         }
 
         # Example: "tcr:509463.30" -> ""
-        convert_kegg_gene_ids = function(kegg_ids) {
-            kegg_to_genedb(kegg_ids, kegg_id_mapping)   
-        }
+        ##convert_kegg_gene_ids = function(kegg_ids) {
+        ##    kegg_to_genedb(kegg_ids, kegg_id_mapping)   
+        ##}
     }
 
     # data frame to store kegg gene mapping and pathway information
@@ -170,8 +176,10 @@ if (!file.exists(kegg_mapping_file)) {
         result = keggLink(pathway) 
         kegg_ids = result[,2]
         gene_ids = convert_kegg_gene_ids(kegg_ids)
-        kegg_mapping = unique(rbind(kegg_mapping,
-                             data.frame(GID=gene_ids, pathway=pathway)))
+        if (!is.null(gene_ids)) {
+            kegg_mapping = unique(rbind(kegg_mapping,
+                data.frame(GID=gene_ids, pathway=pathway)))
+        }
     }
     # Save KEGG mapping
     write.csv(kegg_mapping, file=kegg_mapping_file, quote=FALSE,
@@ -196,6 +204,7 @@ colnames(kegg_table) = c("KEGG_PATH", "GID", "KEGG_NAME", "KEGG_CLASS",
 kegg_table = kegg_table[,c(2, 1, 3, 4, 5)]
 
 # Generate package
+library(RSQLite)
 makeOrgPackage(
     gene_info  = gene_info,
     chromosome = chr_info,
