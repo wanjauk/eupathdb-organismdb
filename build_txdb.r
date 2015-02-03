@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 ###############################################################################
 #
 # TriTrypDB TxDB package generation

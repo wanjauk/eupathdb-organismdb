@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 ###############################################################################
 #
 # TriTrypDB OrganismDB package generation
