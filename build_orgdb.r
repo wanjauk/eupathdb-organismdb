@@ -93,15 +93,19 @@ convert_kegg_gene_ids = function(kegg_ids) {
     result = c()
     for (kegg_id in kegg_ids) {
         if (substring(kegg_id, 1, 4) == 'tcr:') {
+            # T. cruzi
             result = append(result,
                 gsub('tcr:', 'TcCLB.', kegg_id))
+        } else if (substring(kegg_id, 1, 4) == 'tgo:') {
+            # T. gondii
+            result = append(result, gsub('tgo:', '', gsub('_', '.', kegg_id)))
         } else if (substring(kegg_id, 1, 9) == 'lma:LMJF_') {
-                                        # lma:LMJF_11_0100
+            # L. major (lma:LMJF_11_0100)
             result = append(result, 
                 gsub('LMJF', 'LmjF', 
                      gsub("_", "\\.", substring(kegg_id, 5))))
         } else if (substring(kegg_id, 1, 8) == 'lma:LMJF') {
-                                        # lma:LMJF10_TRNALYS_01
+            # L. major (lma:LMJF10_TRNALYS_01)
             parts = unlist(strsplit(kegg_id, "_"))
             result = append(result,
                 sprintf("LmjF.%s.%s.%s",
