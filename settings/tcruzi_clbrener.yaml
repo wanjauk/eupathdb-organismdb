@@ -24,10 +24,11 @@ aliases : '/home/trey/Downloads/TriTrypDB-9.0_TcruziCLBrener_GeneAliases.txt'
 author     : "Keith Hughitt <khughitt@umd.edu>"
 maintainer : "Keith Hughitt <khughitt@umd.edu>"
 
-# TriTrypDB version
-tritrypdb_version : '9.0'
+# EuPathDB version
+db_name    : 'TriTrypDB'
+db_version : '9.0'
 
 # Directories
 build_dir  : 'build'
-output_dir : '.'
+output_dir : 'output'
 

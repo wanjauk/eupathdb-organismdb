@@ -29,7 +29,7 @@ txdb = makeTranscriptDbFromGFF(
     file=settings$gff,
     format='gff3',
     exonRankAttributeName=NA,
-    dataSource=sprintf('TriTrypDB %s', settings$tritrypdb_version),
+    dataSource=sprintf('TriTrypDB %s', settings$db_version),
     species=paste(settings$genus, settings$species)
 )
 
@@ -41,7 +41,7 @@ saveDb(txdb, file=file.path(settings$build_dir, sprintf("%s.sqlite", short_name)
 makeTxDbPackage(
     txdb,
     destDir=settings$output_dir,
-    version=settings$tritrypdb_version,
+    version=settings$db_version,
     maintainer=settings$maintainer,
     author=settings$author,
     license='Artistic-2.0'

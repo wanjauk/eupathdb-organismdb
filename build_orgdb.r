@@ -214,7 +214,7 @@ makeOrgPackage(
     chromosome = chr_info,
     go         = go_table,
     kegg       = kegg_table,
-    version    = settings$tritrypdb_version,
+    version    = settings$db_version,
     author     = settings$author,
     maintainer = settings$maintainer,
     outputDir  = settings$output_dir,

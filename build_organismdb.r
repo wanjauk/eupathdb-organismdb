@@ -46,7 +46,7 @@ makeOrganismPackage(
     pkgname=settings$organismdb_name,
     graphData=graph_data,
     organism=paste(settings$genus, settings$species),
-    version=settings$tritrypdb_version,
+    version=settings$db_version,
     maintainer=settings$maintainer,
     author=settings$author,
     destDir=settings$output_dir,
