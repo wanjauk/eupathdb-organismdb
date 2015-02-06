@@ -26,6 +26,7 @@ maintainer : "Keith Hughitt <khughitt@umd.edu>"
 # EuPathDB version
 db_name    : 'TriTrypDB'
 db_version : '9.0'
+db_url     : 'http://tritrypdb.org/tritrypdb/'
 
 # Directories
 build_dir  : 'build'

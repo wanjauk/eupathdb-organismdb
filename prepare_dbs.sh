@@ -78,6 +78,80 @@ done
 # Fix zzz.R
 sed -i "s/$orgdb_name_short_old/$orgdb_name_short/" R/zzz.R
 
+#
+# Generate README.md
+#
+cat << EOF > README.md
+# $orgdb_name
+
+Genome-wide annotation package for *$description*, based on
+annotations from [$db_name $db_version]($db_url).
+
+This package was generated using the tools from
+[https://github.com/elsayed-lab/eupathdb-organismdb](github.com/eupathdb-organismdb).
+
+Installation
+------------
+
+You can install the latest version from Github using:
+
+\`\`\` r
+library('devtools')
+install_github('elsayed-lab/$orgdb_name')
+\`\`\`
+
+Usage
+-----
+
+This package is based on the Bioconductor
+[AnnotationDbi](http://www.bioconductor.org/packages/release/bioc/html/AnnotationDbi.html)
+interface. As such, the methods for interacting with this package are similar
+to the ways one can interact with other commonly-used annotation packages such as
+[org.Hs.eg.db](http://www.bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html).
+
+Example usage:
+
+\`\`\`r
+library($orgdb_name)
+
+# list available fields to query
+columns($orgdb_name)
+
+# get first 10 genes
+gene_ids = head(keys($orgdb_name), 10)
+
+# gene names and descriptions
+annotations = AnnotationDbi::select($orgdb_name, 
+                                    keys=gene_ids, 
+                                    keytype='GID', 
+                                    columns=c('CHROMOSOME', 'GENENAME'))
+head(annotations)
+
+# GO terms
+go_terms = AnnotationDbi::select($orgdb_name, 
+                                 keys=gene_ids, 
+                                 keytype='GID', 
+                                 columns=c('GO', 'ONTOLOGYALL'))
+head(go_terms)
+
+# KEGG pathways
+kegg_paths = AnnotationDbi::select($orgdb_name,
+                                   keys=gene_ids, 
+                                   keytype='GID', 
+                                   columns=c('KEGG_NAME', 'KEGG_PATH'))
+head(kegg_paths)
+\`\`\`
+
+For more information, check out the [AnnotationDbi - Introduction to Annotation
+packages vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/AnnotationDbi/inst/doc/IntroToAnnotationPackages.pdf).
+
+Additional resources that may be helpful:
+
+1. http://www.bioconductor.org/help/workflows/annotation-data/
+2. http://www.bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html
+3. http://training.bioinformatics.ucdavis.edu/docs/2012/05/DAV/lectures/annotation/annotation.html
+EOF
+
 cd $cwd
 
 #
@@ -104,3 +178,4 @@ mv inst/extdata/${txdb_name_old}.sqlite $dbpath
 sed -i "s/$txdb_name_old/$txdb_name/" man/package.Rd
 
 echo "Done!"
+
