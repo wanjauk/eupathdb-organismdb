@@ -1,11 +1,13 @@
-TriTrypDB OrganismDB package generator
-======================================
+EuPathDB OrganismDB package generator
+=====================================
 
 Overview
 --------
 
-This script uses resources from TriTrypDB to generate a Bioconductor Organism
-annotation package. 
+This script uses resources from [EuPathDB](http://www.eupathdb.org/eupathdb/)
+databases such as [TriTrypDB](http://tritrypdb.org/tritrypdb/) and
+[ToxoDB](http://toxodb.org/toxo/) to generate a Bioconductor Organism
+annotation packages.
 
 Requirements
 ------------
@@ -27,7 +29,7 @@ Next, modify the `build_xx.r` scripts to point to the setting file you wish you
 use.
 
 Note that at present, you may also need to edit the `build_orgdb.r` script
-to enable it to properly map KEGG identifiers to TriTrypDB identifiers for your
+to enable it to properly map KEGG identifiers to EuPathDB identifiers for your
 target species. In the future, this will be generalized if possible so that
 this can be handled via config settings.
 
@@ -65,13 +67,21 @@ All done!
 Getting Help
 ------------
 
-This script has been designed to work with any TriTrypDB organisms for
+This script has been designed to work with any EuPathDB organisms for
 which both GFF and gene TXT annotations are available. Currently, however, it
 has only been tested on L. major Friedlin annotations. If you encounter issues
 using it for your organism of interest, feel free to submit fixes via pull
 requests, or report the problem as an issue.
 
 For questions, feel free to contact me at [khughitt@umd.edu](khughitt@umd.edu).
+
+Generated Packages
+------------------
+
+Below are a list of packages generated for serveral species using these
+scripts:
+
+- TODO
 
 See Also
 --------
