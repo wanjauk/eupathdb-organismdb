@@ -8,6 +8,7 @@
 # 
 ###############################################################################
 library(yaml)
+library(rtracklayer)
 library(GenomicFeatures)
 
 options(stringsAsFactors=FALSE)
@@ -25,12 +26,27 @@ if (!file.exists(settings$build_dir)) {
 build_basename = file.path(settings$build_dir,
                             sub('.gff', '', basename(settings$gff)))
 
+# chromosome info
+gff = import.gff3(settings$gff)
+ch = gff[gff$type == 'chromosome']
+
+chrom_info = data.frame(
+    chrom=ch$ID,
+    length=as.numeric(ch$size),
+    is_circular=NA
+)
+
+# WORK-AROUND 2015/02/29
+# Added 'useGenesAsTranscripts' flag to force inclusion of ncRNAs
+# https://github.com/elsayed-lab/eupathdb-organismdb/issues/1
 txdb = makeTranscriptDbFromGFF(
     file=settings$gff,
     format='gff3',
+    chrominfo=chrom_info,
     exonRankAttributeName=NA,
     dataSource=sprintf('TriTrypDB %s', settings$db_version),
-    species=paste(settings$genus, settings$species)
+    species=paste(settings$genus, settings$species),
+    useGenesAsTranscripts=TRUE
 )
 
 # Save transcript database
