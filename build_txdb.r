@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/usr/bin/env Rscript-devel
 ###############################################################################
 #
 # TriTrypDB TxDB package generation
@@ -39,14 +39,14 @@ chrom_info = data.frame(
 # WORK-AROUND 2015/02/29
 # Added 'useGenesAsTranscripts' flag to force inclusion of ncRNAs
 # https://github.com/elsayed-lab/eupathdb-organismdb/issues/1
-txdb = makeTranscriptDbFromGFF(
+txdb = makeTxDbFromGFF(
     file=settings$gff,
     format='gff3',
     chrominfo=chrom_info,
     exonRankAttributeName=NA,
     dataSource=sprintf('TriTrypDB %s', settings$db_version),
     species=paste(settings$genus, settings$species),
-    useGenesAsTranscripts=TRUE
+    gffTxName=settings$gff_txname
 )
 
 # Save transcript database

@@ -19,6 +19,9 @@ gff     : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-like.gff'
 txt     : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-likeGene.txt.gz'
 aliases : '/path/to/TriTrypDB-9.0_TcruziCLBrenerEsmeraldo-like_GeneAliases.txt'
 
+# GFF feature type to include in TxDb
+gff_txname : 'gene'
+
 # Author
 author     : "Keith Hughitt <khughitt@umd.edu>"
 maintainer : "Keith Hughitt <khughitt@umd.edu>"

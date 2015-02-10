@@ -20,6 +20,8 @@ gff     : '/path/to/TriTrypDB-9.0_LmajorFriedlin.gff'
 txt     : '/path/to/TriTrypDB-9.0_LmajorFriedlinGene.txt.gz'
 aliases : '/path/to/TriTrypDB-9.0_LmajorFriedlin_GeneAliases.txt'
 
+# GFF feature type to include in TxDb
+gff_txname : 'gene'
 
 # Author
 author     : "Keith Hughitt <khughitt@umd.edu>"

@@ -19,6 +19,8 @@ gff : '/home/trey/Downloads/TriTrypDB-9.0_TcruziCLBrener.gff'
 txt : '/home/trey/Downloads/TriTrypDB-9.0_TcruziCLBrenerGene.txt'
 aliases : '/home/trey/Downloads/TriTrypDB-9.0_TcruziCLBrener_GeneAliases.txt'
 
+# GFF feature type to include in TxDb
+gff_txname : 'gene'
 
 # Author
 author     : "Keith Hughitt <khughitt@umd.edu>"
