@@ -39,14 +39,18 @@ chrom_info = data.frame(
 # WORK-AROUND 2015/02/29
 # Added 'useGenesAsTranscripts' flag to force inclusion of ncRNAs
 # https://github.com/elsayed-lab/eupathdb-organismdb/issues/1
-txdb = makeTxDbFromGFF(
+
+# 2015/02/10 Switching back to Bioconductor 3.0 until 3.1 is out in the wild
+#txdb = makeTxDbFromGFF(
+txdb = makeTranscriptDbFromGFF(
     file=settings$gff,
     format='gff3',
     chrominfo=chrom_info,
     exonRankAttributeName=NA,
     dataSource=sprintf('TriTrypDB %s', settings$db_version),
     species=paste(settings$genus, settings$species),
-    gffTxName=settings$gff_txname
+    useGenesAsTranscripts=TRUE,
+    #gffTxName=settings$gff_txname
 )
 
 # Save transcript database
