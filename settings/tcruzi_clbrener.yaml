@@ -10,7 +10,7 @@ description : 'T. cruzi strain CL Brener all haplotypes'
 
 # Package names
 orgdb_name      : 'org.TcCLB.tritryp.db'
-txdb_name       : 'TxDb.TcruziCLBrener.tt9.knownGene'
+txdb_name       : 'TxDb.TcruziCLBrener.tritryp9.genes'
 organismdb_name : 'Trypanosoma.cruzi.CLBrener'
 
 # Annotation file sources

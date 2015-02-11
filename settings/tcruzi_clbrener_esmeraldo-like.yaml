@@ -10,7 +10,7 @@ description : 'T. cruzi strain CL Brener Esmeraldo-like'
 
 # Package names
 orgdb_name      : 'org.TcCLB.esmer.tritryp.db'
-txdb_name       : 'TxDb.TcruziCLBrenerEsmer.tt9.knownGene'
+txdb_name       : 'TxDb.TcruziCLBrenerEsmer.tritryp9.genes'
 organismdb_name : 'Trypanosoma.cruzi.CLBrener.Esmeraldo'
 
 # Annotation file sources
