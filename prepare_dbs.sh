@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# TriTrypDB organism package generation post-processing
+# EuPathDB organism package generation post-processing
 # Keith Hughitt (khughitt@umd.edu)
 # 2015/01/29
 #
@@ -8,7 +8,7 @@
 # scripts, renaming packages and fixing metadata fields.
 ##############################################################################
 
-# TODO: Add TriTrypDB DBSCHEMA?
+# TODO: Add EuPathDB DBSCHEMA?
 # https://github.com/genome-vendor/r-bioc-annotationdbi/tree/master/inst/DBschemas
 
 # YAML parser
@@ -54,12 +54,12 @@ mv $output_dir/$orgdb_name_old $output_dir/$orgdb_name
 cd $output_dir/$orgdb_name
 
 # Fix DESCRIPTION
-sed -i "s/$orgdb_name_old/$orgdb_name/" DESCRIPTION
-sed -i "s/species:.*/species: $description/" DESCRIPTION
-sed -i "s/Entrez/TriTrypDB/" DESCRIPTION
+sed -i "s/$orgdb_name_old/$orgdb_name/g" DESCRIPTION
+sed -i "s/species:.*/species: $description/g" DESCRIPTION
+sed -i "s/Entrez/$db_name/g" DESCRIPTION
 
 # Fix NAMESPACE
-sed -i "s/$orgdb_name_short_old/$orgdb_name_short/" NAMESPACE
+sed -i "s/$orgdb_name_short_old/$orgdb_name_short/g" NAMESPACE
 
 # Fix sqlite database
 dbpath=inst/extdata/${orgdb_name_short}.sqlite
@@ -72,11 +72,11 @@ chmod -w $dbpath
 # Fix manual pages
 for suffix in "BASE.Rd" "ORGANISM.Rd" "_dbconn.Rd"; do
     mv man/${orgdb_name_short_old}${suffix} man/${orgdb_name_short}${suffix}
-    sed -i "s/$orgdb_name_short_old/$orgdb_name_short/" man/${orgdb_name_short}${suffix} 
+    sed -i "s/$orgdb_name_short_old/$orgdb_name_short/g" man/${orgdb_name_short}${suffix} 
 done
 
 # Fix zzz.R
-sed -i "s/$orgdb_name_short_old/$orgdb_name_short/" R/zzz.R
+sed -i "s/$orgdb_name_short_old/$orgdb_name_short/g" R/zzz.R
 
 #
 # Generate OrgDb README.md
@@ -164,18 +164,18 @@ mv $output_dir/$txdb_name_old $output_dir/$txdb_name
 cd $output_dir/$txdb_name
 
 # Fix DESCRIPTION
-sed -i "s/$txdb_name_old/$txdb_name/" DESCRIPTION
-sed -i "s/species:.*/species: $description/" DESCRIPTION
+sed -i "s/$txdb_name_old/$txdb_name/g" DESCRIPTION
+sed -i "s/species:.*/species: $description/g" DESCRIPTION
 
 # Fix NAMESPACE
-sed -i "s/$txdb_name_old/$txdb_name/" NAMESPACE
+sed -i "s/$txdb_name_old/$txdb_name/g" NAMESPACE
 
 # Fix sqlite database
 dbpath=inst/extdata/${txdb_name}.sqlite
 mv inst/extdata/${txdb_name_old}.sqlite $dbpath
 
 # Fix Manual pages
-sed -i "s/$txdb_name_old/$txdb_name/" man/package.Rd
+sed -i "s/$txdb_name_old/$txdb_name/g" man/package.Rd
 
 echo "Done!"
 
