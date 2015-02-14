@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript-devel
+#!/usr/bin/env Rscript
 ###############################################################################
 #
 # TriTrypDB TxDB package generation
@@ -28,7 +28,10 @@ build_basename = file.path(settings$build_dir,
 
 # chromosome info
 gff = import.gff3(settings$gff)
-ch = gff[gff$type == 'chromosome']
+ch = gff[gff$type %in% c('apicoplast_chromosome', 'chromosome', 'supercontig')]
+
+#genes = gff[gff$type == 'gene']
+#gene_ch = unique(as.character(chrom(genes)))
 
 chrom_info = data.frame(
     chrom=ch$ID,

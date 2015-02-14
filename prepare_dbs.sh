@@ -79,7 +79,7 @@ done
 sed -i "s/$orgdb_name_short_old/$orgdb_name_short/" R/zzz.R
 
 #
-# Generate README.md
+# Generate OrgDb README.md
 #
 cat << EOF > README.md
 # $orgdb_name
@@ -179,3 +179,63 @@ sed -i "s/$txdb_name_old/$txdb_name/" man/package.Rd
 
 echo "Done!"
 
+#
+# Generate TxDb README.md
+#
+cat << EOF > README.md
+# $txdb_name
+
+Transcript annotation package for *$description*, based on
+annotated genes from [$db_name $db_version]($db_url).
+
+This package was generated using the tools from
+[https://github.com/elsayed-lab/eupathdb-organismdb](github.com/eupathdb-organismdb).
+
+Installation
+------------
+
+You can install the latest version from Github using:
+
+\`\`\` r
+library('devtools')
+install_github('elsayed-lab/$txdb_name')
+\`\`\`
+
+Usage
+-----
+
+This package is based on the Bioconductor
+[AnnotationDbi](http://www.bioconductor.org/packages/release/bioc/html/AnnotationDbi.html)
+interface. As such, the methods for interacting with this package are similar
+to the ways one can interact with other commonly-used annotation packages such as
+[TxDb.Hsapiens.UCSC.hg19.knownGene](http://www.bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg19.knownGene.html).
+
+Example usage:
+
+\`\`\`r
+library($txdb_name)
+
+# list available fields to query
+columns($txdb_name)
+
+# get first 10 genes
+gene_ids = head(keys($txdb_name), 10)
+
+# gene coordinates and strand
+genes = AnnotationDbi::select($txdb_name, 
+                              keys=gene_ids, 
+                              keytype='GENEID', 
+                              columns=c('TXSTART', 'TXEND', 'TXSTRAND'))
+
+head(genes)
+\`\`\`
+
+For more information, check out the [AnnotationDbi - Introduction to Annotation
+packages vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/AnnotationDbi/inst/doc/IntroToAnnotationPackages.pdf).
+
+Additional resources that may be helpful:
+
+1. http://www.bioconductor.org/help/workflows/annotation-data/
+2. http://www.bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg19.knownGene.html
+3. http://training.bioinformatics.ucdavis.edu/docs/2012/05/DAV/lectures/annotation/annotation.html
+EOF

@@ -64,7 +64,7 @@ if (file.exists(chr_file)) {
     print("Parsing chromosome information...")
     chr_info = data.frame(
         'GID' = genes$ID,
-        'CHROMOSOME' = as.character(seqnames(genes))
+        'CHR' = as.character(seqnames(genes))
     )
     write.table(chr_info, chr_file, sep='\t', quote=FALSE, row.names=FALSE)
 }
