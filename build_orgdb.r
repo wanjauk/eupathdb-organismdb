@@ -21,14 +21,18 @@ options(stringsAsFactors=FALSE)
 # Load settings
 settings = yaml.load_file("config.yaml")
 
+build_dir = file.path(settings$build_dir,
+                      paste0(R.Version()$major,  '.', R.Version()$minor))
+
+
 # Create build and output directories
-if (!file.exists(settings$build_dir)) {
-    dir.create(settings$build_dir)
+if (!file.exists(build_dir)) {
+    dir.create(build_dir)
 }
 if (!file.exists(settings$output_dir)) {
     dir.create(settings$output_dir)
 }
-build_basename = file.path(settings$build_dir,
+build_basename = file.path(build_dir,
                            sub('.gff', '', basename(settings$gff)))
 
 # Parse GFF
