@@ -48,17 +48,17 @@ chrom_info = data.frame(
 
 # 2015/02/10 Switching back to Bioconductor 3.0 until 3.1 is out in the wild
 #txdb = makeTxDbFromGFF(
-#txdb = makeTranscriptDbFromGFF(
+txdb = makeTranscriptDbFromGFF(
     file=settings$gff,
     format='gff3',
     chrominfo=chrom_info,
     exonRankAttributeName=NA,
     dataSource=sprintf('TriTrypDB %s', settings$db_version),
-    useGenesAsTranscripts=TRUE,
-    species=paste(settings$genus, settings$species)
+    species=paste(settings$genus, settings$species),
+    useGenesAsTranscripts=TRUE
 )
-    #gffTxName=settings$gff_txname
-#)
+
+#gffTxName=settings$gff_txname
 
 # Save transcript database
 short_name = paste0(substring(tolower(settings$genus), 1, 1), settings$species)
