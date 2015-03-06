@@ -1,9 +1,9 @@
 #!/usr/bin/env Rscript
 ###############################################################################
 #
-# TriTrypDB OrgDB package generation
+# EuPathDB OrgDB package generation
 #
-# This script uses resources from TriTrypDB to generate a Bioconductor Organism
+# This script uses resources from EuPathDB to generate a Bioconductor Organism
 # annotation package.
 # 
 ###############################################################################
@@ -181,8 +181,7 @@ if (!file.exists(kegg_mapping_file)) {
                                          description=pathway_desc))
         
         # Get genes in pathway
-        result = keggLink(pathway) 
-        kegg_ids = result[,2]
+        kegg_ids = as.character(keggLink(org_abbreviation, pathway))
         gene_ids = convert_kegg_gene_ids(kegg_ids)
         if (!is.null(gene_ids)) {
             kegg_mapping = unique(rbind(kegg_mapping,

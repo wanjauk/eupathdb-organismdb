@@ -1,9 +1,9 @@
 #!/usr/bin/env Rscript-devel
 ###############################################################################
 #
-# TriTrypDB TxDB package generation
+# EuPathDB TxDB package generation
 #
-# This script uses resources from TriTrypDB to generate a Bioconductor
+# This script uses resources from EuPathDB to generate a Bioconductor
 # Transcript annotation package.
 # 
 ###############################################################################
@@ -53,7 +53,7 @@ txdb = makeTranscriptDbFromGFF(
     format='gff3',
     chrominfo=chrom_info,
     exonRankAttributeName=NA,
-    dataSource=sprintf('TriTrypDB %s', settings$db_version),
+    dataSource=sprintf('%s %s', settings$db_name, settings$db_version),
     species=paste(settings$genus, settings$species),
     useGenesAsTranscripts=TRUE
 )

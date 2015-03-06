@@ -1,5 +1,12 @@
 #'
-#' TriTrypDB gene information table GO term parser
+#' EuPathDB gene information table GO term parser
+#'
+#' Note: EuPathDB currently includes some GO annotations corresponding to
+#' obsolete terms. For example, the L. major gene LmjF.19.1390
+#' (http://tritrypdb.org/tritrypdb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=LmjF.19.1390&project_id=TriTrypDB)
+#' includes the term "GO:0003702" on the website and txt data file. The
+#' term has been deprecated, and does not have a category associated with it
+#' on the website. These will not be included in the final database.
 #'
 #' @author Keith Hughitt
 #'
