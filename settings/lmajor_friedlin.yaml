@@ -8,7 +8,6 @@ species     : 'major'
 tax_id      : '347515'
 description : 'L. major strain Friedlin'
 
-
 # Package names
 orgdb_name      : 'org.LmjF.tritryp.db'
 txdb_name       : 'TxDb.LmajorFriedlin.tritryp9.genes'

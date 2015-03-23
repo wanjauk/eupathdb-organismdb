@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript-devel
+#!/usr/bin/env Rscript
 ###############################################################################
 #
 # EuPathDB TxDB package generation
