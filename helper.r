@@ -67,6 +67,48 @@ parse_go_terms = function (filepath) {
     return(unique(go_rows))
 }
 
+#'
+#' EuPathDB gene information table gene type parser
+#'
+#' @author Keith Hughitt
+#'
+#' @param filepath Location of TriTrypDB gene information table.
+#' @return Returns a dataframe mapping gene ids to gene types
+#'
+parse_gene_types = function (filepath) {
+    if (file_ext(filepath) == 'gz') {
+        fp = gzfile(filepath, open='rb')
+    } else {
+        fp = file(filepath, open='r')
+    }
+
+    # Create empty vector to store dataframe rows
+    N = 1e5
+    gene_ids   = c()
+    gene_types = c()
+
+    # Counter to keep track of row number
+    i = 1
+
+    # Iterate through lines in file
+    while (length(x <- readLines(fp, n=1, warn=FALSE)) > 0) {
+        # Gene ID
+        if(grepl("^Gene ID", x)) {
+            gene_id = .get_value(x)
+        }
+        # Gene type
+        else if (grepl("^Gene Type:", x)) {
+            gene_ids[i]   = gene_id
+            gene_types[i] = .get_value(x)
+            i = i + 1
+        }
+    }
+    # close file pointer
+    close(fp)
+
+    return(data.frame(GID=gene_ids, TYPE=gene_types))
+}
+
 #
 # kegg_to_genedb
 #

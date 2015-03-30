@@ -11,6 +11,7 @@ library(yaml)
 library(tools)
 library(rtracklayer)
 library(AnnotationForge)
+library(RSQLite)
 source('helper.r')
 
 options(stringsAsFactors=FALSE)
@@ -74,7 +75,20 @@ if (file.exists(chr_file)) {
 }
 
 #
-# 3. Gene ontology information
+# 3. Gene type information
+#
+gene_type_file = sprintf("%s_gene_type.txt", build_basename)
+
+if (file.exists(gene_type_file)) {
+    gene_types = read.delim(gene_type_file)
+} else {
+    print("Parsing gene types...")
+    gene_types = parse_gene_types(settings$txt)
+    write.table(gene_types, gene_type_file, sep='\t', quote=FALSE, row.names=FALSE)
+}
+
+#
+# 4. Gene ontology information
 #
 go_file = sprintf("%s_go_table.txt", build_basename)
 
@@ -87,7 +101,7 @@ if (file.exists(go_file)) {
 }
 
 #
-# 4. KEGG information
+# 5. KEGG information
 #
 kegg_mapping_file  = sprintf("%s_kegg_mapping.txt", build_basename)
 kegg_pathways_file = sprintf("%s_kegg_pathways.txt", build_basename)
@@ -211,12 +225,12 @@ colnames(kegg_table) = c("KEGG_PATH", "GID", "KEGG_NAME", "KEGG_CLASS",
 kegg_table = kegg_table[,c(2, 1, 3, 4, 5)]
 
 # Generate package
-library(RSQLite)
 makeOrgPackage(
     gene_info  = gene_info,
     chromosome = chr_info,
     go         = go_table,
     kegg       = kegg_table,
+    type       = gene_types,
     version    = settings$db_version,
     author     = settings$author,
     maintainer = settings$maintainer,
