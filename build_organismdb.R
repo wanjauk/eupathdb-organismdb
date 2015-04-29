@@ -45,11 +45,14 @@ graph_data = list(
 names(graph_data$join1) = c('GO.db', settings$orgdb_name)
 names(graph_data$join2) = c(settings$orgdb_name, settings$txdb_name)
 
+# R package versions must be of the form "x.y"
+db_version = paste(settings$db_version, '0', sep='.')
+
 makeOrganismPackage(
     pkgname=settings$organismdb_name,
     graphData=graph_data,
     organism=paste(settings$genus, settings$species),
-    version=settings$db_version,
+    version=db_version,
     maintainer=settings$maintainer,
     author=settings$author,
     destDir=settings$output_dir,

@@ -64,11 +64,14 @@ txdb = makeTranscriptDbFromGFF(
 short_name = paste0(substring(tolower(settings$genus), 1, 1), settings$species)
 saveDb(txdb, file=file.path(build_dir, sprintf("%s.sqlite", short_name)))
 
+# R package versions must be of the form "x.y"
+db_version = paste(settings$db_version, '0', sep='.')
+
 # Build TxDB package
 makeTxDbPackage(
     txdb,
     destDir=settings$output_dir,
-    version=settings$db_version,
+    version=db_version,
     maintainer=settings$maintainer,
     author=settings$author,
     license='Artistic-2.0'

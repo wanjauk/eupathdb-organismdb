@@ -1,18 +1,13 @@
-SPECIES=tcruzi_clbrener
-ORG=org.TCCLB.tritryp.db
-
-install:	prereq forge orgdb
-
-forge:
-	cp settings/${SPECIES}.yaml ./config.yaml
-	./build_orgdb.r
-	./build_txdb.r
-	./build_organismdb.r
-	sh prepare_dbs.sh
+install:	prereq orgdb txdb organismdb
 
 orgdb:
-	Rscript -e "install.packages("./${ORG}", repos=NULL)"
-	Rscript build_organismdb.r
+	Rscript ./build_orgdb.R
+txdb:
+	Rscript ./build_txdb.R
+organismdb:
+	sh prepare_dbs.sh
+	Rscript ./build_organismdb.R
+	sh finalize.sh
 
 prereq:
 	Rscript -e "yaml_test = try(suppressPackageStartupMessages(library('yaml')));\

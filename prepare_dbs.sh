@@ -177,8 +177,6 @@ mv inst/extdata/${txdb_name_old}.sqlite $dbpath
 # Fix Manual pages
 sed -i "s/$txdb_name_old/$txdb_name/g" man/package.Rd
 
-echo "Done!"
-
 #
 # Generate TxDb README.md
 #
@@ -239,3 +237,12 @@ Additional resources that may be helpful:
 2. http://www.bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg19.knownGene.html
 3. http://training.bioinformatics.ucdavis.edu/docs/2012/05/DAV/lectures/annotation/annotation.html
 EOF
+
+# Install OrgDB and TxDb
+echo "Installing databases"
+cd $cwd
+
+R CMD INSTALL $output_dir/$orgdb_name
+R CMD INSTALL $output_dir/$txdb_name
+
+echo "Done!"

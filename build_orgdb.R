@@ -28,10 +28,10 @@ build_dir = file.path(settings$build_dir,
 
 # Create build and output directories
 if (!file.exists(build_dir)) {
-    dir.create(build_dir)
+    dir.create(build_dir, recursive=TRUE)
 }
 if (!file.exists(settings$output_dir)) {
-    dir.create(settings$output_dir)
+    dir.create(settings$output_dir, recursive=TRUE)
 }
 build_basename = file.path(build_dir,
                            sub('.gff', '', basename(settings$gff)))
@@ -224,6 +224,9 @@ colnames(kegg_table) = c("KEGG_PATH", "GID", "KEGG_NAME", "KEGG_CLASS",
 # reorder so GID comes first
 kegg_table = kegg_table[,c(2, 1, 3, 4, 5)]
 
+# R package versions must be of the form "x.y"
+db_version = paste(settings$db_version, '0', sep='.')
+
 # Generate package
 makeOrgPackage(
     gene_info  = gene_info,
@@ -231,7 +234,7 @@ makeOrgPackage(
     go         = go_table,
     kegg       = kegg_table,
     type       = gene_types,
-    version    = settings$db_version,
+    version    = db_version,
     author     = settings$author,
     maintainer = settings$maintainer,
     outputDir  = settings$output_dir,

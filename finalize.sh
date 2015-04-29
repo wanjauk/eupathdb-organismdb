@@ -103,3 +103,8 @@ Additional resources that may be helpful:
 4. http://bioconductor.org/packages/release/data/annotation/html/Homo.sapiens.html
 EOF
 
+# Install OrganismDb
+echo "Installing OrganismDb..."
+cd $cwd
+R CMD INSTALL $output_dir/$organismdb_name
+
