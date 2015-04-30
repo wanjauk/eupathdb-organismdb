@@ -106,11 +106,14 @@ if (file.exists(go_file)) {
 kegg_mapping_file  = sprintf("%s_kegg_mapping.txt", build_basename)
 kegg_pathways_file = sprintf("%s_kegg_pathways.txt", build_basename)
 
-
-convert_kegg_gene_ids = function(kegg_ids) {
+convert_kegg_gene_ids = function(kegg_ids, kegg_id_mapping) {
     result = c()
     for (kegg_id in kegg_ids) {
-        if (substring(kegg_id, 1, 4) == 'tcr:') {
+        if (substring(kegg_id, 1, 4) == 'tbr:') {
+            # T. brucei
+            result = append(result,
+                gsub('tbr:', '', kegg_id))
+        } else if (substring(kegg_id, 1, 4) == 'tcr:') {
             # T. cruzi
             result = append(result,
                 gsub('tcr:', 'TcCLB.', kegg_id))
@@ -144,10 +147,38 @@ if (!file.exists(kegg_mapping_file)) {
     org_abbreviation = paste0(tolower(substring(settings$genus, 1, 1)), 
                               substring(settings$species, 1, 2))
 
-    # TODO: Generalize if possible
 
-    # L. major
-    if (org_abbreviation == 'lma') {
+    # For some species, it is necessary to map gene ids from KEGG to what is
+    # currently used on TriTrypDB.
+    #
+    # TODO: Generalize if possible
+    #
+    if (org_abbreviation == 'tbr') {
+        # Load GeneAlias file and convert entry in KEGG results
+        # to newer GeneDB/TriTrypDB identifiers.
+        fp = file(settings$aliases)
+        rows = strsplit(readLines(fp), "\t")
+        close(fp)
+
+        kegg_id_mapping = list()
+
+        # example alias file entries
+        #Tb927.10.2410  TRYP_x-70a06.p2kb545_720  Tb10.70.5290
+        #Tb927.9.15520  Tb09.244.2520  Tb09.244.2520:mRNA
+        #Tb927.8.5760   Tb08.26E13.490
+        #Tb10.v4.0258   Tb10.1120
+        #Tb927.11.7240  Tb11.02.5150  Tb11.02.5150:mRNA  Tb11.02.5150:pep
+        for (row in rows) {
+            # get first and third columns in the alias file
+            old_ids = row[2:length(row)]
+
+            for (old_id in old_ids[grepl('Tb\\d+\\.\\w+\\.\\d+', old_ids)]) {
+                kegg_id_mapping[old_id] = row[1]
+            }
+        }
+    
+    } else if (org_abbreviation == 'lma') {
+        # L. major
         #
         # Convert KEGG identifiers to TriTrypDB identifiers
         #
@@ -155,8 +186,6 @@ if (!file.exists(kegg_mapping_file)) {
         # format, e.g. "md:lma_M00359", and "bsid:85066"
         #
     } else if (org_abbreviation == 'tcr') {
-        # Load GeneAlias file and convert entry in KEGG results
-        # to newer GeneDB/TriTrypDB identifiers.
         fp = file(settings$aliases)
         rows = strsplit(readLines(fp), "\t")
         close(fp)
@@ -197,6 +226,21 @@ if (!file.exists(kegg_mapping_file)) {
         # Get genes in pathway
         kegg_ids = as.character(keggLink(org_abbreviation, pathway))
         gene_ids = convert_kegg_gene_ids(kegg_ids)
+
+        # Map old T. brucei gene names
+        if (org_abbreviation == 'tbr') {
+            old_gene_ids = gene_ids
+            gene_ids = c()
+
+            for (x in old_gene_ids) {
+                if (x %in% names(kegg_id_mapping)) {
+                    gene_ids = append(gene_ids, kegg_id_mapping[[x]])              
+                } else {
+                    gene_ids = append(gene_ids, x)              
+                }
+            }
+        }
+
         if (!is.null(gene_ids)) {
             kegg_mapping = unique(rbind(kegg_mapping,
                 data.frame(GID=gene_ids, pathway=pathway)))

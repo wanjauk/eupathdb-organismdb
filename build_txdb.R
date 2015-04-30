@@ -29,9 +29,21 @@ if (!file.exists(build_dir)) {
 build_basename = file.path(build_dir,
                             sub('.gff', '', basename(settings$gff)))
 
+#
 # chromosome info
+#
+# NOTE: In the future, perhaps it would be better instead to first filter the
+# source GFF and remove all non-standard entries?
+#
+# non-standard types:
+#
+# apicoplast_chromosome (T. gondii ME49)
+# random_sequence       (T. brucei TREU927)
+# geneontig             (T. brucei TREU927)
+#
 gff = import.gff3(settings$gff)
-ch = gff[gff$type %in% c('apicoplast_chromosome', 'chromosome', 'supercontig')]
+ch = gff[gff$type %in% c('apicoplast_chromosome', 'chromosome', 'contig',
+                         'geneontig', 'random_sequence', 'supercontig')]
 
 #genes = gff[gff$type == 'gene']
 #gene_ch = unique(as.character(chrom(genes)))
