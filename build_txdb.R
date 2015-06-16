@@ -54,23 +54,19 @@ chrom_info = data.frame(
     is_circular=NA
 )
 
-# WORK-AROUND 2015/02/29
-# Added 'useGenesAsTranscripts' flag to force inclusion of ncRNAs
-# https://github.com/elsayed-lab/eupathdb-organismdb/issues/1
+# 2015/06/16 Switching backt o mRNA entries to construct TxDb -- database is
+# intended for mRNAs so ncRNAs will be handled separately.
 
-# 2015/02/10 Switching back to Bioconductor 3.0 until 3.1 is out in the wild
-#txdb = makeTxDbFromGFF(
-txdb = makeTranscriptDbFromGFF(
+#txdb = makeTranscriptDbFromGFF(
+txdb = makeTxDbFromGFF(
     file=settings$gff,
     format='gff3',
     chrominfo=chrom_info,
     exonRankAttributeName=NA,
     dataSource=sprintf('%s %s', settings$db_name, settings$db_version),
-    species=paste(settings$genus, settings$species),
-    useGenesAsTranscripts=TRUE
+    organism=paste(settings$genus, settings$species)
 )
 
-#gffTxName=settings$gff_txname
 
 # Save transcript database
 short_name = paste0(substring(tolower(settings$genus), 1, 1), settings$species)

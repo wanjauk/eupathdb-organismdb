@@ -16,7 +16,7 @@ organismdb_name : 'Trypanosoma.cruzi.CLBrener'
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
 gff : '/home/trey/Downloads/TriTrypDB-_TcruziCLBrener.gff'
-txt : '/home/trey/Downloads/TriTrypDB-24_TcruziCLBrenerGene.txt'
+txt : '/home/trey/Downloads/TriTrypDB-24_TcruziCLBrenerGene.txt.gz'
 aliases : '/home/trey/Downloads/TriTrypDB-24_TcruziCLBrener_GeneAliases.txt'
 
 # GFF feature type to include in TxDb
