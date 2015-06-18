@@ -95,8 +95,31 @@ go_file = sprintf("%s_go_table.txt", build_basename)
 if (file.exists(go_file)) {
     go_table = read.delim(go_file)
 } else {
+    library('GO.db')
+
     print("Parsing GO annotations...")
     go_table = parse_go_terms(settings$txt)
+
+    # Map from non-primary IDs to primary GO ids;
+    # non-primary IDs are filtered out by makeOrgPackage
+    problem_rows = go_table[!go_table$GO %in% keys(GO.db),]
+    synonyms = problem_rows$GO
+
+    # Create a mapping data frame
+    synonym_mapping = data.frame()
+
+    for (syn in synonyms) {
+        if (!is.null(GOSYNONYM[[syn]])) {
+            synonym_mapping = rbind(synonym_mapping, c(syn, GOSYNONYM[[syn]]@GOID))
+        }
+    }
+    colnames(synonym_mapping) = c('synonym', 'primary')
+    synonym_mapping = unique(synonym_mapping)
+
+    # replace alternative GO term identifiers
+    go_table$GO[!go_table$GO %in% keys(GO.db)] = synonym_mapping$primary[match(synonyms, synonym_mapping$synonym)]
+    go_table = unique(go_table[complete.cases(go_table),])
+
     write.table(go_table, go_file, sep='\t', quote=FALSE, row.names=FALSE)
 }
 
