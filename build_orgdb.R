@@ -113,12 +113,15 @@ if (file.exists(go_file)) {
             synonym_mapping = rbind(synonym_mapping, c(syn, GOSYNONYM[[syn]]@GOID))
         }
     }
-    colnames(synonym_mapping) = c('synonym', 'primary')
-    synonym_mapping = unique(synonym_mapping)
-
+    
     # replace alternative GO term identifiers
-    go_table$GO[!go_table$GO %in% keys(GO.db)] = synonym_mapping$primary[match(synonyms, synonym_mapping$synonym)]
-    go_table = unique(go_table[complete.cases(go_table),])
+    if (nrow(synonym_mapping) > 0) {
+        colnames(synonym_mapping) = c('synonym', 'primary')
+        synonym_mapping = unique(synonym_mapping)
+
+        go_table$GO[!go_table$GO %in% keys(GO.db)] = synonym_mapping$primary[match(synonyms, synonym_mapping$synonym)]
+        go_table = unique(go_table[complete.cases(go_table),])
+    }
 
     write.table(go_table, go_file, sep='\t', quote=FALSE, row.names=FALSE)
 }
