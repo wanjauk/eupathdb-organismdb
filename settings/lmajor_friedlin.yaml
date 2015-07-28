@@ -10,14 +10,14 @@ description : 'L. major strain Friedlin'
 
 # Package names
 orgdb_name      : 'org.LmjF.tritryp.db'
-txdb_name       : 'TxDb.LmajorFriedlin.tritryp24.genes'
+txdb_name       : 'TxDb.LmajorFriedlin.tritryp25.genes'
 organismdb_name : 'Leishmania.major.Friedlin'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff     : '/path/to/TriTrypDB-24_LmajorFriedlin.gff'
-txt     : '/path/to/TriTrypDB-24_LmajorFriedlinGene.txt.gz'
-aliases : '/path/to/TriTrypDB-24_LmajorFriedlin_GeneAliases.txt'
+gff     : '/path/to/TriTrypDB-25_LmajorFriedlin.gff'
+txt     : '/path/to/TriTrypDB-25_LmajorFriedlinGene.txt.gz'
+aliases : '/path/to/TriTrypDB-25_LmajorFriedlin_GeneAliases.txt'
 
 # GFF feature type to include in TxDb
 gff_txname : 'gene'
@@ -28,7 +28,7 @@ maintainer : "Keith Hughitt <khughitt@umd.edu>"
 
 # EuPathDB version
 db_name    : 'TriTrypDB'
-db_version : '24'
+db_version : '25'
 db_url     : 'http://tritrypdb.org/tritrypdb/'
 
 # Directories
