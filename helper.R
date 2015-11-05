@@ -64,8 +64,84 @@ parse_go_terms = function (filepath) {
     close(fp)
 
     # TODO: Determine source of non-unique rows in the dataframe
+    # (May have to do with multiple types of evidence?)
     return(unique(go_rows))
 }
+
+#'
+#' EuPathDB gene information table InterPro domain parser
+#'
+#' @author Keith Hughitt
+#'
+#' @param filepath Location of TriTrypDB gene information table.
+#' @param verbose  Whether or not to enable verbose output.
+#'
+#' @return Returns a dataframe where each line includes a gene/domain pairs.
+#'
+parse_interpro_domains = function (filepath) {
+    if (file_ext(filepath) == 'gz') {
+        fp = gzfile(filepath, open='rb')
+    } else {
+        fp = file(filepath, open='r')
+    }
+
+    # Create empty vector to store dataframe rows
+    #N = 1e5
+    #gene_ids = c()
+    #interpro_rows = data.frame(GO=rep("", N),
+    #                     ONTOLOGY=rep("", N), GO_TERM_NAME=rep("", N),
+    #                     SOURCE=rep("", N), EVIDENCE=rep("", N),
+    #                     stringsAsFactors=FALSE)
+
+    # InterPro table columns
+    cols = c('name', 'interpro_id', 'primary_id', 'secondary_id', 'description',
+             'start_min', 'end_min', 'evalue')
+
+    # Iterate through lines in file
+    while (length(x <- readLines(fp, n=1, warn=FALSE)) > 0) {
+        # Gene ID
+        if(grepl("^Gene ID", x)) {
+            gene_id = .get_value(x)
+        }
+
+        # Parse InterPro table
+        else if (grepl("TABLE: InterPro Domains", x)) {
+            # Skip column header row
+            trash = readLines(fp, n=1)
+
+            # Continue reading until end of table
+            raw_table = ""
+
+            entry = readLines(fp, n=1)
+
+            while(length(entry) != 0) {
+                if (raw_table == "") {
+                    raw_table = entry
+                } else {
+                    raw_table = paste(raw_table, entry, sep='\n')
+                }
+                entry = readLines(fp, n=1)
+            }
+
+            # If table length is greater than 0, read ino
+            buffer = textConnection(raw_table)
+
+            interpro_table = read.delim(buffer, header=FALSE, col.names=cols)
+
+        }
+    }
+
+
+    # add gene id column
+    go_rows = cbind(GID=gene_ids, go_rows)
+
+    # close file pointer
+    close(fp)
+
+    # TODO: Determine source of non-unique rows in the dataframe
+    return(unique(go_rows))
+}
+
 
 #'
 #' EuPathDB gene information table gene type parser
@@ -145,4 +221,3 @@ kegg_to_genedb = function(kegg_ids, gene_mapping) {
 .get_value = function(x) {
     return(gsub(" ","", tail(unlist(strsplit(x, ': ')), n=1), fixed=TRUE))
 }
-

@@ -12,7 +12,7 @@ library(tools)
 library(rtracklayer)
 library(AnnotationForge)
 library(RSQLite)
-source('helper.r')
+source('helper.R')
 
 options(stringsAsFactors=FALSE)
 

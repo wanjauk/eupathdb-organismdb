@@ -157,7 +157,7 @@ cd $cwd
 #
 # TranscriptDB
 #
-printf -v txdb_name_old 'TxDb.%s%s' ${genus:0:1} ${species}
+printf -v txdb_name_old 'TxDb.%s%s.%s.%s' ${genus:0:1} ${species} ${db_name} ${db_version}
 echo "Processing $txdb_name_old..."
 
 mv $output_dir/$txdb_name_old $output_dir/$txdb_name
