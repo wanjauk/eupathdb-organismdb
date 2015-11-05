@@ -33,6 +33,9 @@ cwd=$(pwd)
 
 cd $output_dir/$organismdb_name
 
+# Add orgdb and txdb dependencies to NAMESPACE
+sed -i "s/GO.db/GO.db,${orgdb_name},${txdb_name}/" DESCRIPTION
+
 #
 # Generate organismdb README.md
 #
