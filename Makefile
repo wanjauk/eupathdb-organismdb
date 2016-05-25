@@ -5,6 +5,6 @@ orgdb:
 txdb:
 	Rscript ./build_txdb.R
 organismdb:
-	sh prepare_dbs.sh
-	Rscript ./build_organismdb.R
-	sh finalize.sh
+	./prepare_dbs.sh
+	./build_organismdb.R
+	./sh finalize.sh
