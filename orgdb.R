@@ -355,39 +355,24 @@ kegg_table <- kegg_table[,c(2, 1, 3, 4, 5)]
 # R package versions must be of the form "x.y"
 db_version <- paste(settings$db_version, '0', sep='.')
 
-## I think to make this truly correct, we need a list of arguments generated as a loop, with checks for each argument.
-## For example, lpanamensis has no kegg entries, but passing NULL or an empty list fails.
-## For the moment, I am merely handling this by changing the arguments passed to  makeOrgPackage
-org_result <- NULL
-if (nrow(kegg_table) == 0) {
-    org_result <- makeOrgPackage(
-        gene_info  = gene_info,
-        chromosome = chr_info,
-        go         = go_table,
-        type       = gene_types,
-        version    = db_version,
-        author     = settings$author,
-        maintainer = settings$maintainer,
-        outputDir  = settings$output_dir,
-        tax_id     = settings$tax_id,
-        genus      = settings$genus,
-        species    = settings$species,
-        goTable    = "go"
-    )
-} else {
-    org_result <- makeOrgPackage(
-        gene_info  = gene_info,
-        chromosome = chr_info,
-        go         = go_table,
-        kegg = kegg_table,
-        type       = gene_types,
-        version    = db_version,
-        author     = settings$author,
-        maintainer = settings$maintainer,
-        outputDir  = settings$output_dir,
-        tax_id     = settings$tax_id,
-        genus      = settings$genus,
-        species    = settings$species,
-        goTable    = "go"
-    )
+# Compile list of arguments for makeOrgPackage call
+orgdb_args <- list(
+    gene_info  = gene_info,
+    chromosome = chr_info,
+    go         = go_table,
+    type       = gene_types,
+    version    = db_version,
+    author     = settings$author,
+    maintainer = settings$maintainer,
+    outputDir  = settings$output_dir,
+    tax_id     = settings$tax_id,
+    genus      = settings$genus,
+    species    = settings$species,
+    goTable    = "go"
+)
+
+# Add KEGG mapping if one exists
+if (nrow(kegg_table) > 0) {
+    orgdb_args[['kegg']] <- kegg_table
 }
+org_result <- do.call('makeOrgPackage', orgdb_args)
