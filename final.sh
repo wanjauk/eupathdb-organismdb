@@ -25,8 +25,9 @@ function parse_yaml {
    }'
 }
 
+config_file=${1-"config.yaml"}
 # load configuration
-eval $(parse_yaml config.yaml)
+eval $(parse_yaml ${config_file})
 
 # current directory
 cwd=$(pwd)

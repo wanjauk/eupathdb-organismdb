@@ -1,23 +1,31 @@
 #!/usr/bin/env Rscript
 ###############################################################################
-#
-# EuPathDB TxDB package generation
-#
-# This script uses resources from EuPathDB to generate a Bioconductor
-# Transcript annotation package.
-# 
+##
+## EuPathDB TxDB package generation
+##
+## This script uses resources from EuPathDB to generate a Bioconductor
+## Transcript annotation package.
+##
 ###############################################################################
-library(yaml)
-library(rtracklayer)
-library(GenomicFeatures)
+suppressMessages(library(yaml))
+suppressMessages(library(rtracklayer))
+suppressMessages(library(GenomicFeatures))
 
 options(stringsAsFactors=FALSE)
+
+config_file <- "config.yaml"
+args <- commandArgs(TRUE)
+if (length(args) > 0) {
+    config_file <- args[1]
+} else {
+    message("Defaulting to the configuration in 'config.yaml'.")
+}
 
 #
 # MAIN
 #
 # Load settings
-settings = yaml.load_file("config.yaml")
+settings = yaml.load_file(config_file)
 
 build_dir = file.path(settings$build_dir,
                       paste0(R.Version()$major,  '.', R.Version()$minor))
@@ -62,7 +70,7 @@ txdb = makeTxDbFromGFF(
     file=settings$gff,
     format='gff3',
     chrominfo=chrom_info,
-    exonRankAttributeName=NA,
+    ## exonRankAttributeName=NA,
     dataSource=sprintf('%s %s', settings$db_name, settings$db_version),
     organism=paste(settings$genus, settings$species)
 )

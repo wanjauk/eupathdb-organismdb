@@ -1,26 +1,34 @@
 #!/usr/bin/env Rscript
 ###############################################################################
-#
-# TriTrypDB OrganismDB package generation
-#
-# This script uses resources from TriTrypDB to generate a Bioconductor
-# OrganismDB annotation package.
-#
-# Note that in order for this to work properly, TranscriptDB and OrgDB
-# databases must first be generated using the other build_xx.r scripts.
-# 
+##
+## TriTrypDB OrganismDB package generation
+##
+## This script uses resources from TriTrypDB to generate a Bioconductor
+## OrganismDB annotation package.
+##
+## Note that in order for this to work properly, TranscriptDB and OrgDB
+## databases must first be generated using the other build_xx.r scripts.
+##
 ###############################################################################
-library(yaml)
-library(GenomicFeatures)
-library(OrganismDbi)
+suppressMessages(library(yaml))
+suppressMessages(library(GenomicFeatures))
+suppressMessages(library(OrganismDbi))
 
 options(stringsAsFactors=FALSE)
+
+config_file <- "config.yaml"
+args <- commandArgs(TRUE)
+if (length(args) > 0) {
+    config_file <- args[1]
+} else {
+    message("Defaulting to the configuration in 'config.yaml'.")
+}
 
 #
 # MAIN
 #
 # Load settings
-settings = yaml.load_file('config.yaml')
+settings = yaml.load_file(config_file)
 
 build_dir = file.path(settings$build_dir,
                       paste0(R.Version()$major,  '.', R.Version()$minor))
