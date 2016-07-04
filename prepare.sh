@@ -157,25 +157,14 @@ cd $cwd
 #
 # TranscriptDB
 #
-printf -v txdb_name_old 'TxDb.%s%s.%s.%s' ${genus:0:1} ${species} ${db_name} ${db_version}
-echo "Processing $txdb_name_old..."
-
-mv $output_dir/$txdb_name_old $output_dir/$txdb_name
 cd $output_dir/$txdb_name
 
 # Fix DESCRIPTION
-sed -i "s/$txdb_name_old/$txdb_name/g" DESCRIPTION
-sed -i "s/species:.*/species: $description/g" DESCRIPTION
+sed -i "s/species:.*/species: $description/" DESCRIPTION
+sed -i "s/organism:.*/organism: $description/" DESCRIPTION
 
-# Fix NAMESPACE
-sed -i "s/$txdb_name_old/$txdb_name/g" NAMESPACE
-
-# Fix sqlite database
-dbpath=inst/extdata/${txdb_name}.sqlite
-mv inst/extdata/${txdb_name_old}.sqlite $dbpath
-
-# Fix Manual pages
-sed -i "s/$txdb_name_old/$txdb_name/g" man/package.Rd
+escaped_url=$(echo $db_url | sed -e 's/[\/&]/\\&/g')
+sed -i "s/resource_url:.*/resource_url: $escaped_url/" DESCRIPTION
 
 #
 # Generate TxDb README.md

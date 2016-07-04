@@ -83,6 +83,10 @@ saveDb(txdb, file=file.path(build_dir, sprintf("%s.sqlite", short_name)))
 # R package versions must be of the form "x.y"
 db_version = paste(settings$db_version, '0', sep='.')
 
+# Package name to use
+# Ex. TxDb.TcruziCLBrenerEsmer.tritryp27.gene
+#     org.TcCLB.esmer.tritryp.db
+
 # Build TxDB package
 makeTxDbPackage(
     txdb,
@@ -90,6 +94,7 @@ makeTxDbPackage(
     version=db_version,
     maintainer=settings$maintainer,
     author=settings$author,
-    license='Artistic-2.0'
+    license='Artistic-2.0',
+    pkgname=settings$txdb_name
 )
 
