@@ -143,7 +143,14 @@ if (file.exists(go_file)) {
     library('GO.db')
 
     print("Parsing GO annotations...")
-    go_table <- parse_go_terms(settings$txt)
+
+    # 2016/07/03 recent versions of TriTrypDB no longer include
+    # automatically inferred (IEA) GO term annotations in the txt files;
+    # swithing to web service calls to retrieve all annotations.
+    #go_table <- parse_go_terms(settings$txt)
+    go_table <- retrieve_go_terms('tritrypdb.org', config$description)
+
+    # TODO: decide how to handle evidence codes...
 
     # Map from non-primary IDs to primary GO ids;
     # non-primary IDs are filtered out by makeOrgPackage
@@ -229,8 +236,6 @@ if (!file.exists(kegg_mapping_file)) {
     if (org_abbreviation == 'lbr') {
         org_abbreviation <- 'lbz'
     }
-
-
 
     # For some species, it is necessary to map gene ids from KEGG to what is
     # currently used on TriTrypDB.

@@ -69,6 +69,71 @@ parse_go_terms = function (filepath) {
 }
 
 #'
+#' Queries a EuPathDB database for GO term annotations for a species.
+#'
+#' @author Keith Hughitt
+#'
+#' @param database URL of database to query (e.g. tritrypdb.org)
+#' @organism Full organism name as it appears in the database 
+#'  (e.g. "Leishmania major strain Friedlin")
+#'
+#' @returns A one-to-many dataframe mapping from gene ids to GO terms.
+#'
+retrieve_go_terms <- function (database, organism) {
+    # URL-encode organism name
+    organism <- utils::URLencode(organism)
+
+    # Construct query URI
+    entry_url <- 'webservices/GeneQuestions/GenesByTaxon.json'
+    query_url <- sprintf("%s/%s?organism=%s&o-tables=GoTerms", database,
+                         entry_url, organism) }
+
+    # Fetch JSON
+    message("Querying: %s" % query_url)
+    json <- RCurl::getURL(query_url)
+
+    # Convert to R object
+    result <- jsonlite::fromJSON(json)
+    records <- result$response$recordset$records
+
+    # dataframe to store result
+    gene_go_mapping <- data.frame()
+
+    # Iterate over genes and store GO terms
+    for (i in seq_along(records)) {
+        gene_id    <- records[i,'id']
+        gene_table <- records[i,'tables'][[1]]
+
+        # If no annotations found for gene, stop here
+        if (length((gene_table$rows)[[1]]) == 0) {
+            next 
+        }
+
+        # otherwise parse reuslt for gene
+        table_fields <- gene_table$rows[[1]]$fields
+
+        # Example entry in table_fields:
+        # [[8]]
+        #            name              value
+        # 1         go_id         GO:0005524
+        # 2      ontology Molecular Function
+        # 3  go_term_name        ATP binding
+        # 4        source           Interpro
+        # 5 evidence_code                IEA
+        # 6        is_not               <NA>
+
+        # retrieve GO ids and evidence codes
+        go_ids <- sapply(table_fields, function(x) { x$value[1] })
+        evidence <- sapply(table_fields, function(x) { x$value[5] })
+
+        # add to output dataframe
+        gene_go_mapping <- rbind(gene_go_mapping, 
+                                 cbind(GID=gene_id, GO=go_ids, EVIDENCE=evidence))
+    }
+    return(gene_go_mapping)
+}
+
+#'
 #' EuPathDB gene information table InterPro domain parser
 #'
 #' @author Keith Hughitt
