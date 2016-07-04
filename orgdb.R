@@ -84,8 +84,9 @@ if (file.exists(gene_file)) {
     num_rows <- nrow(gene_info)
     gene_info[["GENEALIAS"]] <- as.character(gene_info[["GENEALIAS"]])
 
-    # Remove any newlines present in GENEALIAS field (found for one T. cruzi
-    # gene)
+    # Remove any newlines present in GENEALIAS field;
+    # as.character inserts newlines for objects with >500 characters.
+	# https://stat.ethz.ch/R-manual/R-devel/library/base/html/character.html
     gene_info[["GENEALIAS"]] <- gsub('\n', '', gene_info[["GENEALIAS"]])
 
     ## Get rid of character(0) and NA entries
