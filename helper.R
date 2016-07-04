@@ -63,8 +63,7 @@ parse_go_terms = function (filepath) {
     # close file pointer
     close(fp)
 
-    # TODO: Determine source of non-unique rows in the dataframe
-    # (May have to do with multiple types of evidence?)
+    # Drop duplicate entries for different evidence codes and return result
     return(unique(go_rows))
 }
 
@@ -86,10 +85,10 @@ retrieve_go_terms <- function (database, organism) {
     # Construct query URI
     entry_url <- 'webservices/GeneQuestions/GenesByTaxon.json'
     query_url <- sprintf("%s/%s?organism=%s&o-tables=GoTerms", database,
-                         entry_url, organism) }
+                         entry_url, organism)
 
     # Fetch JSON
-    message("Querying: %s" % query_url)
+    message(sprintf("Querying: %s", query_url))
     json <- RCurl::getURL(query_url)
 
     # Convert to R object
@@ -100,7 +99,7 @@ retrieve_go_terms <- function (database, organism) {
     gene_go_mapping <- data.frame()
 
     # Iterate over genes and store GO terms
-    for (i in seq_along(records)) {
+    for (i in 1:nrow(records)) {
         gene_id    <- records[i,'id']
         gene_table <- records[i,'tables'][[1]]
 
@@ -130,6 +129,22 @@ retrieve_go_terms <- function (database, organism) {
         gene_go_mapping <- rbind(gene_go_mapping, 
                                  cbind(GID=gene_id, GO=go_ids, EVIDENCE=evidence))
     }
+
+    # Keep the strongest evidence code available for each annotation and
+    # drop the rest.
+    # http://geneontology.org/page/guide-go-evidence-codes
+
+    # Separate into automatically inferred annotations (those with evidence
+    # code IEA, "Inferred from Electronic Annotation", and all others.
+    iea_annotations <- gene_go_mapping %>% filter(EVIDENCE == 'IEA')
+    other_annotations <- gene_go_mapping %>% filter(EVIDENCE != 'IEA')
+
+    # Deduplicate other annotations, and add an IEA entry back in for
+    # each gene/GO pair not supported by another type of evidence
+    other_annotations <- other_annotations[!duplicated(other_annotations[,1:2]),]
+
+    gene_go_mapping <- rbind(other_annotations, iea_annotations)
+
     return(gene_go_mapping)
 }
 

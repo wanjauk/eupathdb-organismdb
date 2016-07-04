@@ -13,12 +13,17 @@ suppressMessages(library(tools))
 suppressMessages(library(rtracklayer))
 suppressMessages(library(AnnotationForge))
 suppressMessages(library(RSQLite))
+suppressMessages(library(dplyr))
 source('helper.R')
 
 options(stringsAsFactors=FALSE)
 
+# default settings file
 config_file <- "config.yaml"
+
+# if alternate config file specified, use that instead
 args <- commandArgs(TRUE)
+
 if (length(args) > 0) {
     config_file <- args[1]
 } else {
@@ -54,26 +59,36 @@ genes <- gff[gff$type == 'gene']
 #
 gene_file <- sprintf("%s_gene_info.txt", build_basename)
 
+# Check to see if caches version of metadata exists and load it if it does
 if (file.exists(gene_file)) {
     message(paste0("Reading pre-existing gene file: ", gene_file))
     gene_info <- read.delim(gene_file)
 } else {
+    # Otherwise, parse GFF to get basic gene featurs
     message(paste0("Parsing gene information from: ", settings$gff))
-    ##    gene_info <- as.data.frame(elementMetadata(genes[,c('ID', 'description')]))
     gene_info <- as.data.frame(elementMetadata(genes))
+
     # Convert form-encoded description string to human-readable
     gene_info$description <- gsub("\\+", " ", gene_info$description)
+
+    # Normalize columns names
     colnames(gene_info) <- toupper(colnames(gene_info))
     colnames(gene_info)[colnames(gene_info) == "ID"] <- "GID"
-    gid_index <- grep("GID", colnames(gene_info))
+
     ## Move gid to the front of the line.
+    gid_index <- grep("GID", colnames(gene_info))
     gene_info <- gene_info[, c(gid_index, (1:ncol(gene_info))[-gid_index])]
     colnames(gene_info) <- paste0("GENE", colnames(gene_info))
     colnames(gene_info)[1] <- "GID"
 
     num_rows <- nrow(gene_info)
     gene_info[["GENEALIAS"]] <- as.character(gene_info[["GENEALIAS"]])
-    ## Get rid of character(0) crap and NAs
+
+    # Remove any newlines present in GENEALIAS field (found for one T. cruzi
+    # gene)
+    gene_info[["GENEALIAS"]] <- gsub('\n', '', gene_info[["GENEALIAS"]])
+
+    ## Get rid of character(0) and NA entries
     is.empty <- function(stuff) {
         (length(stuff) == 0) && (typeof(stuff) == "character")
     }
@@ -88,6 +103,8 @@ if (file.exists(gene_file)) {
         }
         y
     }
+
+    # Check for empty columns and remove them
     for (col in colnames(gene_info)) {
         tmp_col <- gene_info[[col]]
         empty_index <- is.empty.col(tmp_col)
@@ -98,8 +115,12 @@ if (file.exists(gene_file)) {
         }
         gene_info[[col]] <- as.character(gene_info[[col]])
     }
+
+    # Replace remaining NA entries with the "null" string
     gene_info[is.na(gene_info)] <- "null"
     gene_info[gene_info == "NA"] <- "null"
+
+    # Save results
     write.table(gene_info, gene_file, sep='\t', quote=FALSE, row.names=FALSE)
 }
 
@@ -148,9 +169,15 @@ if (file.exists(go_file)) {
     # automatically inferred (IEA) GO term annotations in the txt files;
     # swithing to web service calls to retrieve all annotations.
     #go_table <- parse_go_terms(settings$txt)
-    go_table <- retrieve_go_terms('tritrypdb.org', config$description)
+    go_table <- retrieve_go_terms('tritrypdb.org', settings$description)
 
-    # TODO: decide how to handle evidence codes...
+    # Check to make sure result is valid
+    if (nrow(go_table) == 0) {
+        # If error occurs, check to make sure the organism name is in
+        # settings$description is formatted the same as on EuPathDB
+        # e.g. http://tritrypdb.org/tritrypdb/webservices/GeneQuestions/GenesByGoTerm.wadl
+        stop("Failed to retrieve GO terms for the specified organism.")
+    }
 
     # Map from non-primary IDs to primary GO ids;
     # non-primary IDs are filtered out by makeOrgPackage
@@ -381,3 +408,4 @@ if (nrow(kegg_table) > 0) {
     orgdb_args[['kegg']] <- kegg_table
 }
 org_result <- do.call('makeOrgPackage', orgdb_args)
+

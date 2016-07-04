@@ -6,7 +6,7 @@
 genus       : 'Trypanosoma'
 species     : 'cruzi'
 tax_id      : '353153'
-description : 'T. cruzi strain CL Brener Esmeraldo-like'
+description : 'Trypanosoma cruzi CL Brener Esmeraldo-like'
 
 # Package names
 orgdb_name      : 'org.TcCLB.esmer.tritryp.db'

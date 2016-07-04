@@ -6,7 +6,7 @@
 genus       : 'Trypanosoma'
 species     : 'cruzi'
 tax_id      : '353153'
-description : 'T. cruzi strain CL Brener all haplotypes'
+description : 'Trypanosoma cruzi CL Brener all haplotypes'
 
 # Package names
 orgdb_name      : 'org.TcCLB.tritryp.db'
