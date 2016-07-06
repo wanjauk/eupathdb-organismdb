@@ -124,7 +124,7 @@ gene_ids = head(keys($orgdb_name), 10)
 annotations = AnnotationDbi::select($orgdb_name, 
                                     keys=gene_ids, 
                                     keytype='GID', 
-                                    columns=c('CHROMOSOME', 'GENENAME'))
+                                    columns=c('CHROMOSOME', 'GENEDESCRIPTION'))
 head(annotations)
 
 # GO terms

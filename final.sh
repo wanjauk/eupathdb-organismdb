@@ -80,7 +80,7 @@ columns($organismdb_name)
 gene_ids = head(keys($organismdb_name), 10)
 
 # fields of interest
-fields = c('CHROMOSOME', 'GENENAME', 'TXSTRAND', 'TXSTART', 'TXEND')
+fields = c('CHROMOSOME', 'GENEDESCRIPTION', 'TXSTRAND', 'TXSTART', 'TXEND')
 
 # Gene info
 annotations = AnnotationDbi::select($organismdb_name, 
