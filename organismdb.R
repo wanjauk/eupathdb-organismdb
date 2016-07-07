@@ -28,16 +28,16 @@ if (length(args) > 0) {
 # MAIN
 #
 # Load settings
-settings = yaml.load_file(config_file)
+settings <- yaml.load_file(config_file)
 
-build_dir = file.path(settings$build_dir,
+build_dir <- file.path(settings$build_dir,
                       paste0(R.Version()$major,  '.', R.Version()$minor))
 
 # Create build directory
 if (!file.exists(build_dir)) {
     dir.create(build_dir)
 }
-build_basename = file.path(build_dir,
+build_basename <- file.path(build_dir,
                             sub('.gff', '', basename(settings$gff)))
 
 # Load organism-specific packages
@@ -45,16 +45,16 @@ library(settings$orgdb_name, character.only=TRUE)
 library(settings$txdb_name,  character.only=TRUE)
 
 # mapping
-graph_data = list(
+graph_data <- list(
     join1=c(GO.db='GOID', orgdb='GO'),
     join2=c(orgdb='GID',  txdb='GENEID')
 )
 
-names(graph_data$join1) = c('GO.db', settings$orgdb_name)
-names(graph_data$join2) = c(settings$orgdb_name, settings$txdb_name)
+names(graph_data$join1) <- c('GO.db', settings$orgdb_name)
+names(graph_data$join2) <- c(settings$orgdb_name, settings$txdb_name)
 
 # R package versions must be of the form "x.y"
-db_version = paste(settings$db_version, '0', sep='.')
+db_version <- paste(settings$db_version, '0', sep='.')
 
 makeOrganismPackage(
     pkgname=settings$organismdb_name,

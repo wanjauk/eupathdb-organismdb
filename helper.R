@@ -136,8 +136,8 @@ retrieve_go_terms <- function (database, organism) {
 
     # Separate into automatically inferred annotations (those with evidence
     # code IEA, "Inferred from Electronic Annotation", and all others.
-    iea_annotations <- gene_go_mapping %>% filter(EVIDENCE == 'IEA')
-    other_annotations <- gene_go_mapping %>% filter(EVIDENCE != 'IEA')
+    iea_annotations <- gene_go_mapping[gene_go_mapping$EVIDENCE == 'IEA',]                                                                                                 
+    other_annotations <- gene_go_mapping[gene_go_mapping$EVIDENCE != 'IEA',]
 
     # Deduplicate other annotations, and add an IEA entry back in for
     # each gene/GO pair not supported by another type of evidence

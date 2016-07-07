@@ -6,7 +6,7 @@
 genus       : 'Trypanosoma'
 species     : 'brucei'
 tax_id      : '185431'
-description : 'T. brucei strain TREU927'
+description : 'Trypanosoma brucei strain TREU927'
 
 # Package names
 orgdb_name      : 'org.Tb927.tritryp.db'

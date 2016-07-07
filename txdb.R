@@ -25,16 +25,16 @@ if (length(args) > 0) {
 # MAIN
 #
 # Load settings
-settings = yaml.load_file(config_file)
+settings <- yaml.load_file(config_file)
 
-build_dir = file.path(settings$build_dir,
+build_dir <- file.path(settings$build_dir,
                       paste0(R.Version()$major,  '.', R.Version()$minor))
 
 # Create build directory
 if (!file.exists(build_dir)) {
     dir.create(build_dir)
 }
-build_basename = file.path(build_dir,
+build_basename <- file.path(build_dir,
                             sub('.gff', '', basename(settings$gff)))
 
 #
@@ -49,14 +49,14 @@ build_basename = file.path(build_dir,
 # random_sequence       (T. brucei TREU927)
 # geneontig             (T. brucei TREU927)
 #
-gff = import.gff3(settings$gff)
-ch = gff[gff$type %in% c('apicoplast_chromosome', 'chromosome', 'contig',
+gff <- import.gff3(settings$gff)
+ch <- gff[gff$type %in% c('apicoplast_chromosome', 'chromosome', 'contig',
                          'geneontig', 'random_sequence', 'supercontig')]
 
-#genes = gff[gff$type == 'gene']
-#gene_ch = unique(as.character(chrom(genes)))
+#genes <- gff[gff$type == 'gene']
+#gene_ch <- unique(as.character(chrom(genes)))
 
-chrom_info = data.frame(
+chrom_info <- data.frame(
     chrom=ch$ID,
     length=as.numeric(ch$size),
     is_circular=NA
@@ -65,8 +65,8 @@ chrom_info = data.frame(
 # 2015/06/16 Switching backt o mRNA entries to construct TxDb -- database is
 # intended for mRNAs so ncRNAs will be handled separately.
 
-#txdb = makeTranscriptDbFromGFF(
-txdb = makeTxDbFromGFF(
+#txdb <- makeTranscriptDbFromGFF(
+txdb <- makeTxDbFromGFF(
     file=settings$gff,
     format='gff3',
     chrominfo=chrom_info,
@@ -77,11 +77,11 @@ txdb = makeTxDbFromGFF(
 
 
 # Save transcript database
-short_name = paste0(substring(tolower(settings$genus), 1, 1), settings$species)
+short_name <- paste0(substring(tolower(settings$genus), 1, 1), settings$species)
 saveDb(txdb, file=file.path(build_dir, sprintf("%s.sqlite", short_name)))
 
 # R package versions must be of the form "x.y"
-db_version = paste(settings$db_version, '0', sep='.')
+db_version <- paste(settings$db_version, '0', sep='.')
 
 # Package name to use
 # Ex. TxDb.TcruziCLBrenerEsmer.tritryp27.gene

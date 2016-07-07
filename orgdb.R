@@ -13,7 +13,6 @@ suppressMessages(library(tools))
 suppressMessages(library(rtracklayer))
 suppressMessages(library(AnnotationForge))
 suppressMessages(library(RSQLite))
-suppressMessages(library(dplyr))
 source('helper.R')
 
 options(stringsAsFactors=FALSE)

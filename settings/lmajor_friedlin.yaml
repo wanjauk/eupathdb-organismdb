@@ -6,7 +6,7 @@
 genus       : 'Leishmania'
 species     : 'major'
 tax_id      : '347515'
-description : 'L. major strain Friedlin'
+description : 'Leishmania major strain Friedlin'
 
 # Package names
 orgdb_name      : 'org.LmjF.tritryp.db'

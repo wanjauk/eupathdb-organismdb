@@ -6,7 +6,7 @@
 genus       : 'Toxoplasma'
 species     : 'gondii'
 tax_id      : '508771'
-description : 'T. gondii strain ME49'
+description : 'Toxoplasma gondii strain ME49'
 
 # Package names
 orgdb_name      : 'org.TGME49.toxo.db'

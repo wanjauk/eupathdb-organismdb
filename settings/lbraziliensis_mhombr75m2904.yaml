@@ -6,7 +6,7 @@
 genus       : 'Leishmania'
 species     : 'braziliensis'
 tax_id      : '420245'
-description : 'L. braziliensis MHOM/BR/75/M2904'
+description : 'Leishmania braziliensis MHOM/BR/75/M2904'
 
 # Package names
 orgdb_name      : 'org.LbrM.tritryp.db'
