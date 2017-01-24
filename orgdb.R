@@ -169,7 +169,8 @@ if (file.exists(go_file)) {
     # automatically inferred (IEA) GO term annotations in the txt files;
     # swithing to web service calls to retrieve all annotations.
     #go_table <- parse_go_terms(settings$txt)
-    go_table <- retrieve_go_terms('tritrypdb.org', settings$description)
+    organism <- paste(settings$genus, settings$species, settings$strain)
+    go_table <- retrieve_go_terms('tritrypdb.org', organism)
 
     # Check to make sure result is valid
     if (nrow(go_table) == 0) {

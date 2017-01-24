@@ -80,7 +80,7 @@ parse_go_terms = function (filepath) {
 #'
 retrieve_go_terms <- function (database, organism) {
     # URL-encode organism name
-    organism <- utils::URLencode(organism)
+    organism <- utils::URLencode(organism, reserved=TRUE)
 
     # Construct query URI
     entry_url <- 'webservices/GeneQuestions/GenesByTaxon.json'
