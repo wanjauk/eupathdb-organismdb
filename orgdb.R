@@ -67,26 +67,35 @@ if (file.exists(gene_file)) {
     message(paste0("Parsing gene information from: ", settings$gff))
     gene_info <- as.data.frame(elementMetadata(genes))
 
+    # GFF field names changed from TriTrypDB 28 -> 29
+    if ('description' %in% colnames(gene_info)) {
+        #
+        # TriTrypDB 28 and earlier
+        #
+
+        # Normalize columns names
+        colnames(gene_info) <- toupper(colnames(gene_info))
+        colnames(gene_info)[colnames(gene_info) == "ID"] <- "GID"
+
+        ## Move gid to the front of the line.
+        gid_index <- grep("GID", colnames(gene_info))
+        gene_info <- gene_info[, c(gid_index, (1:ncol(gene_info))[-gid_index])]
+        colnames(gene_info) <- paste0("GENE", colnames(gene_info))
+        colnames(gene_info)[1] <- "GID"
+    }
+
     # Convert form-encoded description string to human-readable
-    gene_info$description <- gsub("\\+", " ", gene_info$description)
-
-    # Normalize columns names
-    colnames(gene_info) <- toupper(colnames(gene_info))
-    colnames(gene_info)[colnames(gene_info) == "ID"] <- "GID"
-
-    ## Move gid to the front of the line.
-    gid_index <- grep("GID", colnames(gene_info))
-    gene_info <- gene_info[, c(gid_index, (1:ncol(gene_info))[-gid_index])]
-    colnames(gene_info) <- paste0("GENE", colnames(gene_info))
-    colnames(gene_info)[1] <- "GID"
+    gene_info$GENEDESCRIPTION <- gsub("\\+", " ", gene_info$GENEDESCRIPTION)
 
     num_rows <- nrow(gene_info)
-    gene_info[["GENEALIAS"]] <- as.character(gene_info[["GENEALIAS"]])
 
     # Remove any newlines present in GENEALIAS field;
     # as.character inserts newlines for objects with >500 characters.
-	# https://stat.ethz.ch/R-manual/R-devel/library/base/html/character.html
-    gene_info[["GENEALIAS"]] <- gsub('\n', '', gene_info[["GENEALIAS"]])
+    # https://stat.ethz.ch/R-manual/R-devel/library/base/html/character.html
+    if ("GENEALIAS" %in% colnames(gene_info)) {
+        gene_info[["GENEALIAS"]] <- as.character(gene_info[["GENEALIAS"]])
+        gene_info[["GENEALIAS"]] <- gsub('\n', '', gene_info[["GENEALIAS"]])
+    }
 
     ## Get rid of character(0) and NA entries
     is.empty <- function(stuff) {
@@ -148,8 +157,8 @@ gene_type_file <- sprintf("%s_gene_type.txt", build_basename)
 if (file.exists(gene_type_file)) {
     gene_types <- read.delim(gene_type_file)
 } else {
-    message(paste0("Parsing gene types from ", settings$txt))
-    gene_types <- parse_gene_types(settings$txt)
+    message("Retrieving gene types from TriTrypDB web API")
+    gene_types <- get_gene_types('tritrypdb', settings$description)
     write.table(gene_types, gene_type_file, sep='\t', quote=FALSE, row.names=FALSE)
 }
 
@@ -169,7 +178,8 @@ if (file.exists(go_file)) {
     # automatically inferred (IEA) GO term annotations in the txt files;
     # swithing to web service calls to retrieve all annotations.
     #go_table <- parse_go_terms(settings$txt)
-    organism <- paste(settings$genus, settings$species, settings$strain)
+
+    organism <- settings$description
     go_table <- retrieve_go_terms('tritrypdb.org', organism)
 
     # Check to make sure result is valid
@@ -393,7 +403,7 @@ orgdb_args <- list(
     gene_info  = gene_info,
     chromosome = chr_info,
     go         = go_table,
-    type       = gene_types,
+    type       = gnismene_types,
     version    = db_version,
     author     = settings$author,
     maintainer = settings$maintainer,

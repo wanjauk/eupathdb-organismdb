@@ -9,6 +9,7 @@
 ###############################################################################
 suppressMessages(library(yaml))
 suppressMessages(library(rtracklayer))
+suppressMessages(library(Biostrings))
 suppressMessages(library(GenomicFeatures))
 
 options(stringsAsFactors=FALSE)
@@ -49,32 +50,48 @@ build_basename <- file.path(build_dir,
 # random_sequence       (T. brucei TREU927)
 # geneontig             (T. brucei TREU927)
 #
+
+# load GFF
 gff <- import.gff3(settings$gff)
-ch <- gff[gff$type %in% c('apicoplast_chromosome', 'chromosome', 'contig',
-                         'geneontig', 'random_sequence', 'supercontig')]
 
-#genes <- gff[gff$type == 'gene']
-#gene_ch <- unique(as.character(chrom(genes)))
+# load FASTA
+fasta <- readDNAStringSet(settings$fasta)
 
+# Get chromosome length information from FASTA file
 chrom_info <- data.frame(
-    chrom=ch$ID,
-    length=as.numeric(ch$size),
+    chrom=sapply(strsplit(names(fasta), ' '), '[[', 1),
+    length=width(fasta),
     is_circular=NA
 )
 
-# 2015/06/16 Switching backt o mRNA entries to construct TxDb -- database is
-# intended for mRNAs so ncRNAs will be handled separately.
+# Add required 'Resource URL' field to the metadata
+metadata <- rbind(metadata, c('Resource URL', settings$db_url))
 
-#txdb <- makeTranscriptDbFromGFF(
 txdb <- makeTxDbFromGFF(
     file=settings$gff,
     format='gff3',
-    chrominfo=chrom_info,
-    ## exonRankAttributeName=NA,
+    #chrominfo=chrom_info,
     dataSource=sprintf('%s %s', settings$db_name, settings$db_version),
-    organism=paste(settings$genus, settings$species)
+    organism=paste(settings$genus, settings$species,
+    metadata=metadata)
 )
 
+# 2017/02/08 Work around: MakeTxDBFromGFF not working in current version
+#gr <- import(settings$gff, format='gff3',
+#             colnames=GenomicFeatures:::GFF3_COLNAMES,
+#             feature.type=GenomicFeatures:::GFF_FEATURE_TYPES)
+
+#circ_seqs <- GenomicFeatures:::DEFAULT_CIRC_SEQS
+#gr <- GenomicFeatures:::.tidy_seqinfo(gr, circ_seqs, NULL) 
+
+#metadata <- GenomicFeatures:::.prepareGFFMetadata(
+#    settings$gff,
+#    sprintf('%s %s', settings$db_name, settings$db_version),
+#    paste(settings$genus, settings$species),
+#    settings$tax_id)
+
+## work-around 2016/02/08
+#txdb <- makeTxDbFromGRanges(gr, metadata=metadata)
 
 # Save transcript database
 short_name <- paste0(substring(tolower(settings$genus), 1, 1), settings$species)
@@ -88,13 +105,25 @@ db_version <- paste(settings$db_version, '0', sep='.')
 #     org.TcCLB.esmer.tritryp.db
 
 # Build TxDB package
-makeTxDbPackage(
-    txdb,
-    destDir=settings$output_dir,
-    version=db_version,
-    maintainer=settings$maintainer,
-    author=settings$author,
-    license='Artistic-2.0',
-    pkgname=settings$txdb_name
-)
+# Work-around 2016/02/08
+result <- tryCatch({
+    makeTxDbPackage(
+        txdb,
+        version=db_version,
+        maintainer=settings$maintainer,
+        author=settings$author,
+        destDir=settings$output_dir,
+        license='Artistic-2.0',
+        pkgname=settings$txdb_name,
+        provider=settings$db_name,
+        providerVersion=settings$db_version
+    )
+}, error=function(e) {
+    # above fails in recent versions of Bioconductor due to 'inst/extdata'
+    # directly not being present
+    db_path <- file.path(settings$output_dir, settings$txdb_name, "inst",
+                         "extdata", paste(settings$txdb_name,"sqlite",sep="."))
+    dir.create(dirname(db_path), recursive=TRUE)
+    saveDb(txdb, file=db_path)
+})
 
