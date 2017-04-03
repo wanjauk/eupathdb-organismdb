@@ -7,18 +7,18 @@ genus       : 'Trypanosoma'
 species     : 'brucei'
 strain      : 'TREU927'
 tax_id      : '185431'
-description : 'Trypanosoma brucei TREU927'
+description : 'Trypanosoma brucei brucei TREU927'
 
 # Package names
 orgdb_name      : 'org.Tb927.tritryp.db'
-txdb_name       : 'TxDb.TbruceiTREU927.tritryp29.genes'
+txdb_name       : 'TxDb.TbruceiTREU927.tritryp31.genes'
 organismdb_name : 'Trypanosoma.brucei.TREU927'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff     : '/path/to/TriTrypDB-29_TbruceiTREU927.gff'
-txt     : '/path/to/TriTrypDB-29_TbruceiTREU927Gene.txt.gz'
-aliases : '/path/to/TriTrypDB-29_TbruceiTREU927_GeneAliases.txt'
+gff     : '/path/to/TriTrypDB-31_TbruceiTREU927.gff'
+txt     : '/path/to/TriTrypDB-31_TbruceiTREU927Gene.txt.gz'
+aliases : '/path/to/TriTrypDB-31_TbruceiTREU927_GeneAliases.txt'
 
 # GFF feature type to include in TxDb
 gff_txname : 'gene'
@@ -29,7 +29,7 @@ maintainer : "Keith Hughitt <khughitt@umd.edu>"
 
 # EuPathDB version
 db_name    : 'TriTrypDB'
-db_version : '29'
+db_version : '31'
 db_url     : 'http://tritrypdb.org/tritrypdb/'
 
 # Directories

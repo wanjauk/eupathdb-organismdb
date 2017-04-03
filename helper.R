@@ -83,8 +83,11 @@ retrieve_go_terms <- function (database, organism) {
     organism <- utils::URLencode(organism, reserved=TRUE)
 
     # Construct query URI
-    entry_url <- 'webservices/GeneQuestions/GenesByTaxon.json'
-    query_url <- sprintf("%s/%s?organism=%s&o-tables=GoTerms", database,
+
+    # work-around for EuPathDB 29 broken API
+    #entry_url <- 'webservices/GeneQuestions/GenesByTaxon.json'
+    entry_url <- 'webservices/GeneQuestions/GenesByTaxonGene.json'
+    query_url <- sprintf("%s/%s?organism=%s&o-tables=GOTerms", database,
                          entry_url, organism)
 
     # Fetch JSON
@@ -97,6 +100,9 @@ retrieve_go_terms <- function (database, organism) {
 
     # dataframe to store result
     gene_go_mapping <- data.frame()
+
+    # drop "/TriTrypDB" if it appears in ID's
+    records$id <- sub('/.*', '', records$id)
 
     # Iterate over genes and store GO terms
     for (i in 1:nrow(records)) {
@@ -111,19 +117,22 @@ retrieve_go_terms <- function (database, organism) {
         # otherwise parse reuslt for gene
         table_fields <- gene_table$rows[[1]]$fields
 
-        # Example entry in table_fields:
-        # [[8]]
-        #            name              value
-        # 1         go_id         GO:0005524
-        # 2      ontology Molecular Function
-        # 3  go_term_name        ATP binding
-        # 4        source           Interpro
-        # 5 evidence_code                IEA
-        # 6        is_not               <NA>
+        # Example entry in table_fields (TriTrypDB 31):
+        #
+        #1          transcript_ids          LmjF.01.0030:mRNA                                                                                                                                           
+        #2                ontology         Molecular Function                                                                                                                                           
+        #3                   go_id                 GO:0003777                                                                                                                                           
+        #4            go_term_name microtubule motor activity                                                                                                                                           
+        #5                  source                   Interpro                                                                                                                                           
+        #6           evidence_code                        IEA                                                                                                                                           
+        #7                  is_not                        N/A                                                                                                                                           
+        #8               reference                       <NA>                                                                                                                                           
+        #9 evidence_code_parameter                       <NA>   
+        #
 
         # retrieve GO ids and evidence codes
-        go_ids <- sapply(table_fields, function(x) { x$value[1] })
-        evidence <- sapply(table_fields, function(x) { x$value[5] })
+        go_ids <- sapply(table_fields, function(x) { x$value[3] })
+        evidence <- sapply(table_fields, function(x) { x$value[6] })
 
         # add to output dataframe
         gene_go_mapping <- rbind(gene_go_mapping, 
@@ -222,47 +231,68 @@ parse_interpro_domains = function (filepath) {
     return(unique(go_rows))
 }
 
+#'
+#' Returns a mapping of gene ID to gene type for a specified organism
+#'
+#' Adapted from https://github.com/elsayed-lab/eupathdb
+#'
+#' @param data_provider Name of data provider to query (e.g. 'TriTrypDB')
+#' @param organism Full name of organism, as used by EuPathDB APIs
+#'
+#' @return Dataframe with 'GID' and 'TYPE' columns.
+#'
+get_gene_types <- function(data_provider, organism) {
+    # query EuPathDB API
+    res <- .query_eupathdb(data_provider, organism, 'o-fields=gene_type')
+    dat <- res$response$recordset$records
+
+    # get vector of types
+    types <- sapply(dat$fields, function (x) x[,'value'])
+
+    # return as dataframe
+    data.frame(GID=dat$id, TYPE=types, stringsAsFactors=FALSE)
+}
 
 #'
-#' EuPathDB gene information table gene type parser
+#' Queries one of the EuPathDB APIs and returns a dataframe representation
+#' of the result.
 #'
-#' @author Keith Hughitt
+#' Adapted from https://github.com/elsayed-lab/eupathdb
 #'
-#' @param filepath Location of TriTrypDB gene information table.
-#' @return Returns a dataframe mapping gene ids to gene types
+#' @param data_provider Name of data provider to query (e.g. 'TriTrypDB')
+#' @param organism Full name of organism, as used by EuPathDB APIs
+#' @param query_args String of additional query arguments
+#' @param wadl String specifying API service to be queried
+#' @param format String specifying API response type (currently only 'json'
+#'        is supported)
+#' @return list containing response from API request.
 #'
-parse_gene_types = function (filepath) {
-    if (file_ext(filepath) == 'gz') {
-        fp = gzfile(filepath, open='rb')
+#' More information
+#' ----------------
+#' 1. http://tritrypdb.org/tritrypdb/serviceList.jsp
+#'
+.query_eupathdb <- function(data_provider, organism, query_args,
+                            wadl='GeneQuestions/GenesByTaxon', format='json') {
+    # construct API query
+    base_url <- sprintf('http://%s.org/webservices/%s.%s?', 
+                        tolower(data_provider), wadl, format)
+    query_string <- sprintf('organism=%s&%s', 
+                            URLencode(organism, reserved=TRUE), query_args)
+    request_url <- paste0(base_url, query_string)
+
+    if (length(request_url) > 200) {
+        paste0(log_url <- strtrim(request_url, 160), '...')
     } else {
-        fp = file(filepath, open='r')
+        log_url <- request_url
     }
+    message(sprintf("- Querying %s", log_url))
 
-    # Create empty vector to store dataframe rows
-    N = 1e5
-    gene_ids   = c()
-    gene_types = c()
-
-    # Counter to keep track of row number
-    i = 1
-
-    # Iterate through lines in file
-    while (length(x <- readLines(fp, n=1, warn=FALSE)) > 0) {
-        # Gene ID
-        if(grepl("^Gene ID", x)) {
-            gene_id = .get_value(x)
-        }
-        # Gene type
-        else if (grepl("^Gene Type:", x)) {
-            gene_ids[i]   = gene_id
-            gene_types[i] = .get_value(x)
-            i = i + 1
-        }
+    # query API for gene types
+    if (format == 'json') {
+        jsonlite::fromJSON(request_url)
+    } else {
+        stop("Invalid response type specified.")
     }
-    # close file pointer
-    close(fp)
-
-    return(data.frame(GID=gene_ids, TYPE=gene_types))
 }
 
 #

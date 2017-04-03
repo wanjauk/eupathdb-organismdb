@@ -10,14 +10,14 @@ description : 'Trypanosoma cruzi Sylvio X10/1'
 
 # Package names
 orgdb_name      : 'org.TcSylvio.tritryp.db'
-txdb_name       : 'TxDb.TcruziSylvio.tritryp29.genes'
+txdb_name       : 'TxDb.TcruziSylvio.tritryp31.genes'
 organismdb_name : 'Trypanosoma.cruzi.Sylvio.X10.1'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff     : '/path/to/TriTrypDB-29_TcruziSylvioX10-1.gff'
-txt     : '/path/to/TriTrypDB-29_TcruziSylvioX10-1Gene.txt.gz'
-aliases : '/path/to/TriTrypDB-29_TcruziSylvioX10-1_GeneAliases.txt'
+gff     : '/path/to/TriTrypDB-31_TcruziSylvioX10-1.gff'
+txt     : '/path/to/TriTrypDB-31_TcruziSylvioX10-1Gene.txt.gz'
+aliases : '/path/to/TriTrypDB-31_TcruziSylvioX10-1_GeneAliases.txt'
 
 # GFF feature type to include in TxDb
 gff_txname : 'gene'
@@ -28,7 +28,7 @@ maintainer : "Keith Hughitt <khughitt@umd.edu>"
 
 # EuPathDB version
 db_name    : 'TriTrypDB'
-db_version : '29'
+db_version : '31'
 db_url     : 'http://tritrypdb.org/tritrypdb/'
 
 # Directories

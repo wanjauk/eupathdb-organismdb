@@ -10,14 +10,14 @@ description : 'Toxoplasma gondii strain ME49'
 
 # Package names
 orgdb_name      : 'org.TGME49.toxo.db'
-txdb_name       : 'TxDb.TgondiiME49.toxo29.genes'
+txdb_name       : 'TxDb.TgondiiME49.toxo31.genes'
 organismdb_name : 'Toxoplasma.gondii.ME49'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff     : '/path/to/ToxoDB-29_TgondiiME49.gff'
-txt     : '/path/to/ToxoDB-29_TgondiiME49Gene.txt.gz'
-aliases : '/path/to/ToxoDB-29_TgondiiME49_GeneAliases.txt'
+gff     : '/path/to/ToxoDB-31_TgondiiME49.gff'
+txt     : '/path/to/ToxoDB-31_TgondiiME49Gene.txt.gz'
+aliases : '/path/to/ToxoDB-31_TgondiiME49_GeneAliases.txt'
 
 # GFF feature type to include in TxDb
 gff_txname : 'gene'
@@ -28,7 +28,7 @@ maintainer : "Keith Hughitt <khughitt@umd.edu>"
 
 # EuPathDB version
 db_name    : 'ToxoDB'
-db_version : '29'
+db_version : '31'
 db_url     : 'http://toxodb.org/toxo/'
 
 # Directories

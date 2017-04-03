@@ -398,12 +398,14 @@ kegg_table <- kegg_table[,c(2, 1, 3, 4, 5)]
 # R package versions must be of the form "x.y"
 db_version <- paste(settings$db_version, '0', sep='.')
 
+message("Building OrgDB")
+
 # Compile list of arguments for makeOrgPackage call
 orgdb_args <- list(
     gene_info  = gene_info,
     chromosome = chr_info,
     go         = go_table,
-    type       = gnismene_types,
+    type       = gene_types,
     version    = db_version,
     author     = settings$author,
     maintainer = settings$maintainer,
