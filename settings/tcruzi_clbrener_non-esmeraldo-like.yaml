@@ -16,6 +16,7 @@ organismdb_name : 'Trypanosoma.cruzi.CLBrener.NonEsmeraldo'
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
 gff     : '/path/to/TriTrypDB-31_TcruziCLBrenerNon-Esmeraldo-like.gff'
+fasta   : '/path/to/TriTrypDB-31_TcruziCLBrenerNon-Esmeraldo-like_Genome.fasta'
 txt     : '/path/to/TriTrypDB-31_TcruziCLBrenerNon-Esmeraldo-likeGene.txt.gz'
 aliases : '/path/to/TriTrypDB-31_TcruziCLBrenerNon-Esmeraldo-like_GeneAliases.txt'
 

@@ -16,6 +16,7 @@ organismdb_name : 'Leishmania.braziliensis.MHOMBR75M2904'
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
 gff     : '/path/to/TriTrypDB-31_LbraziliensisMHOMBR75M2904.gff'
+fasta   : '/path/to/TriTrypDB-31_LbraziliensisMHOMBR75M2904_Genome.fasta'
 txt     : '/path/to/TriTrypDB-31_LbraziliensisMHOMBR75M2904Gene.txt.gz'
 aliases : '/path/to/TriTrypDB-31_LbraziliensisMHOMBR75M2904_GeneAliases.txt'
 

@@ -16,6 +16,7 @@ organismdb_name : 'Trypanosoma.cruzi.Sylvio.X10.1'
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
 gff     : '/path/to/TriTrypDB-31_TcruziSylvioX10-1.gff'
+fasta   : '/path/to/TriTrypDB-31_TcruziSylvioX10-1_Genome.fasta'
 txt     : '/path/to/TriTrypDB-31_TcruziSylvioX10-1Gene.txt.gz'
 aliases : '/path/to/TriTrypDB-31_TcruziSylvioX10-1_GeneAliases.txt'
 

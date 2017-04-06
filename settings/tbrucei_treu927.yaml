@@ -17,6 +17,7 @@ organismdb_name : 'Trypanosoma.brucei.TREU927'
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
 gff     : '/path/to/TriTrypDB-31_TbruceiTREU927.gff'
+fasta:  : '/path/to/TriTrypDB-31_TbruceiTREU927_Genome.fasta'
 txt     : '/path/to/TriTrypDB-31_TbruceiTREU927Gene.txt.gz'
 aliases : '/path/to/TriTrypDB-31_TbruceiTREU927_GeneAliases.txt'
 

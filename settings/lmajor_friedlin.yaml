@@ -16,6 +16,7 @@ organismdb_name : 'Leishmania.major.Friedlin'
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
 gff     : '/path/to/TriTrypDB-31_LmajorFriedlin.gff'
+fasta   : '/path/to/TriTrypDB-31_LmajorFriedlin_Genome.fasta'
 txt     : '/path/to/TriTrypDB-31_LmajorFriedlinGene.txt.gz'
 aliases : '/path/to/TriTrypDB-31_LmajorFriedlin_GeneAliases.txt'
 

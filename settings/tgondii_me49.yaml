@@ -16,6 +16,7 @@ organismdb_name : 'Toxoplasma.gondii.ME49'
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
 gff     : '/path/to/ToxoDB-31_TgondiiME49.gff'
+fasta   : '/path/to/ToxoDB-31_TgondiiME49_Genome.fasta'
 txt     : '/path/to/ToxoDB-31_TgondiiME49Gene.txt.gz'
 aliases : '/path/to/ToxoDB-31_TgondiiME49_GeneAliases.txt'
 

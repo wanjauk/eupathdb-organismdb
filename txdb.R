@@ -64,48 +64,48 @@ chrom_info <- data.frame(
     is_circular=NA
 )
 
-# Add required 'Resource URL' field to the metadata
-metadata <- rbind(metadata, c('Resource URL', settings$db_url))
+# Bioconductor 3.5
+if (BiocInstaller::biocVersion() >= 3.5) {
+    txdb <- makeTxDbFromGFF(
+        file=settings$gff,
+        format='gff3',
+        chrominfo=chrom_info,
+        dataSource=sprintf('%s %s', settings$db_name, settings$db_version),
+        organism=paste(settings$genus, settings$species),
+        metadata=c('Resource URL', settings$db_url)
+    )
+else {
+    # Bioconductor 3.4 (work-around)
 
-txdb <- makeTxDbFromGFF(
-    file=settings$gff,
-    format='gff3',
-    #chrominfo=chrom_info,
-    dataSource=sprintf('%s %s', settings$db_name, settings$db_version),
-    organism=paste(settings$genus, settings$species,
-    metadata=metadata)
-)
+    # generate metadata dataframe
+    metadata <- GenomicFeatures:::.prepareGFFMetadata(
+        settings$gff,
+        sprintf('%s %s', settings$db_name, settings$db_version),
+        paste(settings$genus, settings$species),
+        settings$tax_id)
 
-# 2017/02/08 Work around: MakeTxDBFromGFF not working in current version
-#gr <- import(settings$gff, format='gff3',
-#             colnames=GenomicFeatures:::GFF3_COLNAMES,
-#             feature.type=GenomicFeatures:::GFF_FEATURE_TYPES)
+    # Add required 'Resource URL' field to the metadata
+    metadata <- rbind(metadata, c('Resource URL', settings$db_url))
 
-#circ_seqs <- GenomicFeatures:::DEFAULT_CIRC_SEQS
-#gr <- GenomicFeatures:::.tidy_seqinfo(gr, circ_seqs, NULL) 
+    gr <- import(settings$gff, format='gff3',
+                colnames=GenomicFeatures:::GFF3_COLNAMES,
+                feature.type=GenomicFeatures:::GFF_FEATURE_TYPES)
 
-#metadata <- GenomicFeatures:::.prepareGFFMetadata(
-#    settings$gff,
-#    sprintf('%s %s', settings$db_name, settings$db_version),
-#    paste(settings$genus, settings$species),
-#    settings$tax_id)
+    circ_seqs <- GenomicFeatures:::DEFAULT_CIRC_SEQS
+    gr <- GenomicFeatures:::.tidy_seqinfo(gr, circ_seqs, NULL) 
 
-## work-around 2016/02/08
-#txdb <- makeTxDbFromGRanges(gr, metadata=metadata)
+    ## work-around 2016/02/08
+    txdb <- makeTxDbFromGRanges(gr, metadata=metadata)
 
-# Save transcript database
-short_name <- paste0(substring(tolower(settings$genus), 1, 1), settings$species)
-saveDb(txdb, file=file.path(build_dir, sprintf("%s.sqlite", short_name)))
+    # Save transcript database
+    short_name <- paste0(substring(tolower(settings$genus), 1, 1), settings$species)
+    saveDb(txdb, file=file.path(build_dir, sprintf("%s.sqlite", short_name)))
 
-# R package versions must be of the form "x.y"
-db_version <- paste(settings$db_version, '0', sep='.')
-
-# Package name to use
-# Ex. TxDb.TcruziCLBrenerEsmer.tritryp27.gene
-#     org.TcCLB.esmer.tritryp.db
+    # R package versions must be of the form "x.y"
+    db_version <- paste(settings$db_version, '0', sep='.')
+}
 
 # Build TxDB package
-# Work-around 2016/02/08
 result <- tryCatch({
     makeTxDbPackage(
         txdb,
@@ -125,5 +125,6 @@ result <- tryCatch({
                          "extdata", paste(settings$txdb_name,"sqlite",sep="."))
     dir.create(dirname(db_path), recursive=TRUE)
     saveDb(txdb, file=db_path)
+
 })
 
