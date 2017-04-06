@@ -28,8 +28,10 @@ if (length(args) > 0) {
 # Load settings
 settings <- yaml.load_file(config_file)
 
-build_dir <- file.path(settings$build_dir,
-                      paste0(R.Version()$major,  '.', R.Version()$minor))
+rversion <- paste0(R.Version()$major,  '.', R.Version()$minor)
+
+build_dir <- file.path(settings$build_dir, rversion)
+output_dir <- file.path(settings$output_dir, rversion)
 
 # Create build directory
 if (!file.exists(build_dir)) {
@@ -74,7 +76,7 @@ if (BiocInstaller::biocVersion() >= 3.5) {
         organism=paste(settings$genus, settings$species),
         metadata=c('Resource URL', settings$db_url)
     )
-else {
+} else {
     # Bioconductor 3.4 (work-around)
 
     # generate metadata dataframe
@@ -112,7 +114,7 @@ result <- tryCatch({
         version=db_version,
         maintainer=settings$maintainer,
         author=settings$author,
-        destDir=settings$output_dir,
+        destDir=output_dir,
         license='Artistic-2.0',
         pkgname=settings$txdb_name,
         provider=settings$db_name,
@@ -121,7 +123,7 @@ result <- tryCatch({
 }, error=function(e) {
     # above fails in recent versions of Bioconductor due to 'inst/extdata'
     # directly not being present
-    db_path <- file.path(settings$output_dir, settings$txdb_name, "inst",
+    db_path <- file.path(output_dir, settings$txdb_name, "inst",
                          "extdata", paste(settings$txdb_name,"sqlite",sep="."))
     dir.create(dirname(db_path), recursive=TRUE)
     saveDb(txdb, file=db_path)

@@ -33,6 +33,9 @@ function parse_yaml {
 # load configuration
 eval $(parse_yaml config.yaml)
 
+r_version=$(R --version | head -1 | egrep -o '[0-9]+\.[0-9]+\.[0-9]+')
+output_dir=${output_dir}/${r_version}
+
 # current directory
 cwd=$(pwd)
 

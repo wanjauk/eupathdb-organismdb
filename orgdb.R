@@ -35,16 +35,17 @@ if (length(args) > 0) {
 # Load settings
 settings <- yaml.load_file(config_file)
 
-build_dir <- file.path(settings$build_dir,
-                      paste0(R.Version()$major,  '.', R.Version()$minor))
+rversion <- paste0(R.Version()$major,  '.', R.Version()$minor)
 
+build_dir <- file.path(settings$build_dir, rversion)
+output_dir <- file.path(settings$output_dir, rversion)
 
 # Create build and output directories
 if (!file.exists(build_dir)) {
     dir.create(build_dir, recursive=TRUE)
 }
-if (!file.exists(settings$output_dir)) {
-    dir.create(settings$output_dir, recursive=TRUE)
+if (!file.exists(output_dir)) {
+    dir.create(output_dir, recursive=TRUE)
 }
 build_basename <- file.path(build_dir,
                            sub('.gff', '', basename(settings$gff)))
@@ -409,7 +410,7 @@ orgdb_args <- list(
     version    = db_version,
     author     = settings$author,
     maintainer = settings$maintainer,
-    outputDir  = settings$output_dir,
+    outputDir  = output_dir,
     tax_id     = settings$tax_id,
     genus      = settings$genus,
     species    = settings$species,

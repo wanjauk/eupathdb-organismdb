@@ -32,6 +32,9 @@ eval $(parse_yaml ${config_file})
 # current directory
 cwd=$(pwd)
 
+r_version=$(R --version | head -1 | egrep -o '[0-9]+\.[0-9]+\.[0-9]+')
+output_dir=${output_dir}/${r_version}
+
 cd $output_dir/$organismdb_name
 
 # Add orgdb and txdb dependencies to NAMESPACE

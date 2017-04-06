@@ -30,8 +30,10 @@ if (length(args) > 0) {
 # Load settings
 settings <- yaml.load_file(config_file)
 
-build_dir <- file.path(settings$build_dir,
-                      paste0(R.Version()$major,  '.', R.Version()$minor))
+rversion <- paste0(R.Version()$major,  '.', R.Version()$minor)
+
+build_dir <- file.path(settings$build_dir, rversion)
+output_dir <- file.path(settings$output_dir, rversion)
 
 # Create build directory
 if (!file.exists(build_dir)) {
@@ -63,6 +65,6 @@ makeOrganismPackage(
     version=db_version,
     maintainer=settings$maintainer,
     author=settings$author,
-    destDir=settings$output_dir,
+    destDir=output_dir,
     license='Artistic-2.0'
 )
