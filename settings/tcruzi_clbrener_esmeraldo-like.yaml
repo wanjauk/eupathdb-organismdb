@@ -5,20 +5,20 @@
 # Organism
 genus       : 'Trypanosoma'
 species     : 'cruzi'
-tax_id      : '353153'
+tax_id      : '353253'
 description : 'Trypanosoma cruzi CL Brener Esmeraldo-like'
 
 # Package names
 orgdb_name      : 'org.TcCLB.esmer.tritryp.db'
-txdb_name       : 'TxDb.TcruziCLBrenerEsmer.tritryp31.genes'
+txdb_name       : 'TxDb.TcruziCLBrenerEsmer.tritryp32.genes'
 organismdb_name : 'Trypanosoma.cruzi.CLBrener.Esmeraldo'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff     : '/path/to/TriTrypDB-31_TcruziCLBrenerEsmeraldo-like.gff'
-fasta   : '/path/to/TriTrypDB-31_TcruziCLBrenerEsmeraldo-like_Genome.fasta'
-txt     : '/path/to/TriTrypDB-31_TcruziCLBrenerEsmeraldo-likeGene.txt.gz'
-aliases : '/path/to/TriTrypDB-31_TcruziCLBrenerEsmeraldo-like_GeneAliases.txt'
+gff     : '/path/to/TriTrypDB-32_TcruziCLBrenerEsmeraldo-like.gff'
+fasta   : '/path/to/TriTrypDB-32_TcruziCLBrenerEsmeraldo-like_Genome.fasta'
+txt     : '/path/to/TriTrypDB-32_TcruziCLBrenerEsmeraldo-likeGene.txt.gz'
+aliases : '/path/to/TriTrypDB-32_TcruziCLBrenerEsmeraldo-like_GeneAliases.txt'
 
 # GFF feature type to include in TxDb
 gff_txname : 'gene'
@@ -29,7 +29,7 @@ maintainer : "Keith Hughitt <khughitt@umd.edu>"
 
 # EuPathDB version
 db_name    : 'TriTrypDB'
-db_version : '31'
+db_version : '32'
 db_url     : 'http://tritrypdb.org/tritrypdb/'
 
 # Directories
