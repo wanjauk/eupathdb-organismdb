@@ -160,6 +160,14 @@ if (file.exists(gene_type_file)) {
 } else {
     message("Retrieving gene types from TriTrypDB web API")
     gene_types <- get_gene_types('tritrypdb', settings$description)
+
+    # in recent versions of EuPathDB (32) the GID field needs to be
+    # corrected (e.g. "LmjF.01.0010/LmjF.01.0010:mRNA/TriTrypDB")
+    gene_types$GID <- sapply(strsplit(gene_types$GID, '/'), function (x) { x[[1]] })
+
+    # remove duplicated entries
+    gene_types <- gene_types[!duplicated(gene_types),]
+
     write.table(gene_types, gene_type_file, sep='\t', quote=FALSE, row.names=FALSE)
 }
 

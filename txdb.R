@@ -102,10 +102,10 @@ if (BiocInstaller::biocVersion() >= 3.5) {
     # Save transcript database
     short_name <- paste0(substring(tolower(settings$genus), 1, 1), settings$species)
     saveDb(txdb, file=file.path(build_dir, sprintf("%s.sqlite", short_name)))
-
-    # R package versions must be of the form "x.y"
-    db_version <- paste(settings$db_version, '0', sep='.')
 }
+
+# R package versions must be of the form "x.y"
+db_version <- paste(settings$db_version, '0', sep='.')
 
 # Build TxDB package
 result <- tryCatch({
@@ -127,6 +127,5 @@ result <- tryCatch({
                          "extdata", paste(settings$txdb_name,"sqlite",sep="."))
     dir.create(dirname(db_path), recursive=TRUE)
     saveDb(txdb, file=db_path)
-
 })
 
