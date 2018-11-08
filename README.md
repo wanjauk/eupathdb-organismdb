@@ -1,6 +1,16 @@
 EuPathDB OrganismDB package generator
 =====================================
 
+DEPRECATION NOTICE
+------------------
+
+**Note Oct 2018**: This package has been deprecated and is no longer being actively maintained.
+Instead, users interested in accessing EuPathDB resources in R/Biocondcutor can now use the much
+simpler [AnnotationHub](https://github.com/Bioconductor/AnnotationHub) interface to query for
+resources.
+
+See the [Accessing EuPathDB Resources using AnnotationHub](https://bioconductor.org/packages/devel/data/annotation/vignettes/EuPathDB/inst/doc/EuPathDB.html) vignette for examples.
+
 Overview
 --------
 
