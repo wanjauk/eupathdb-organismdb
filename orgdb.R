@@ -189,7 +189,10 @@ if (file.exists(go_file)) {
     #go_table <- parse_go_terms(settings$txt)
 
     organism <- settings$description
-    go_table <- retrieve_go_terms('tritrypdb.org', organism)
+
+    # add "https://" to URL to solve the redirection error
+    #go_table <- retrieve_go_terms('tritrypdb.org', organism)
+    go_table <- retrieve_go_terms('https://tritrypdb.org', organism)
 
     # Check to make sure result is valid
     if (nrow(go_table) == 0) {

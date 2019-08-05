@@ -11,15 +11,15 @@ description : 'Trypanosoma brucei brucei TREU927'
 
 # Package names
 orgdb_name      : 'org.Tb927.tritryp.db'
-txdb_name       : 'TxDb.TbruceiTREU927.tritryp32.genes'
+txdb_name       : 'TxDb.TbruceiTREU927.tritryp43.genes'
 organismdb_name : 'Trypanosoma.brucei.TREU927'
 
 # Annotation file sources
 # If not specified, or files do not exists, will attempt to download
-gff     : '/path/to/TriTrypDB-32_TbruceiTREU927.gff'
-fasta:  : '/path/to/TriTrypDB-32_TbruceiTREU927_Genome.fasta'
-txt     : '/path/to/TriTrypDB-32_TbruceiTREU927Gene.txt.gz'
-aliases : '/path/to/TriTrypDB-32_TbruceiTREU927_GeneAliases.txt'
+gff     : '../tbrucei_annotation_package/annotation_files/TriTrypDB-43_TbruceiTREU927.gff'
+fasta   : '../tbrucei_annotation_package/annotation_files/TriTrypDB-43_TbruceiTREU927_Genome.fasta'
+txt     : '../tbrucei_annotation_package/annotation_files/TriTrypDB-43_TbruceiTREU927Gene.txt.gz'
+aliases : '../tbrucei_annotation_package/annotation_files/TriTrypDB-43_TbruceiTREU927_GeneAliases.txt'
 
 # GFF feature type to include in TxDb
 gff_txname : 'gene'
@@ -30,10 +30,10 @@ maintainer : "Keith Hughitt <khughitt@umd.edu>"
 
 # EuPathDB version
 db_name    : 'TriTrypDB'
-db_version : '32'
+db_version : '43'
 db_url     : 'http://tritrypdb.org/tritrypdb/'
 
 # Directories
-build_dir  : 'build'
-output_dir : 'output'
+build_dir  : '../tbrucei_annotation_package/build'
+output_dir : '../tbrucei_annotation_package/output'
 
